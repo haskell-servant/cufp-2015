@@ -4,11 +4,9 @@
 
 module Api where
 
-import           Control.Monad
 import           Data.Aeson
 import           Data.List
 import           Data.List.Split
-import           Data.Maybe
 import           Data.String.Conversions
 import           Data.Word
 import           Servant
@@ -34,10 +32,10 @@ instance ToJSON Ip where
 instance FromJSON Ip where
   parseJSON v = case v of
     String s -> case splitOn "." (cs s) of
-      words
-        | length words == 4
+      ws
+        | length ws == 4
         -> maybe err return $ do
-          [a, b, c, d] <- mapM readMaybe words
+          [a, b, c, d] <- mapM readMaybe ws
           return $ Ip (a, b, c, d)
       _ -> err
     _ -> err

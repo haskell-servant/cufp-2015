@@ -12,6 +12,7 @@ executable ip-manager
   hs-source-dirs:
       driver
     , src
+  ghc-options: -Wall
   build-depends:
       base
     , servant-server
@@ -34,6 +35,7 @@ test-suite spec
   hs-source-dirs:
       test
     , src
+  ghc-options: -Wall
   build-depends:
       base
     , servant-server

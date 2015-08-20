@@ -11,6 +11,7 @@ import           Test.Hspec.Wai.JSON
 
 import           App
 
+spec :: Spec
 spec = with app $ do
   describe "/ips" $ do
     it "returns an empty list" $ do

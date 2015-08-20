@@ -1,5 +1,7 @@
 name: ip-manager
 
+ghc-options: -Wall
+
 dependencies:
   - base
   - servant-server
