@@ -24,10 +24,8 @@ data Ip
   deriving (Show, Read)
 
 instance ToJSON Ip where
-  toJSON (Ip (a, b, c, d)) =
-    String $ cs $
-    intercalate "." $
-    map show [a, b, c, d]
+  toJSON ip =
+    String $ cs $ showIp ip
 
 instance FromJSON Ip where
   parseJSON v = case v of
@@ -45,3 +43,8 @@ parseIp s = case splitOn "." s of
       [a, b, c, d] <- mapM readMaybe ws
       return $ Ip (a, b, c, d)
   _ -> Nothing
+
+showIp :: Ip -> String
+showIp (Ip (a, b, c, d)) =
+  intercalate "." $
+  map show [a, b, c, d]

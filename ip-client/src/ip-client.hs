@@ -31,7 +31,7 @@ main = do
   case newIp options of
     Nothing -> do
       ips <- try $ getListIps
-      mapM_ print ips
+      mapM_ (putStrLn . showIp) ips
     Just new -> do
       ip <- maybe (die "invalid ip") return $ parseIp new
       try $ postNewIp ip
