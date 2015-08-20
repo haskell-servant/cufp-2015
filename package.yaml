@@ -1,0 +1,33 @@
+name: ip-manager
+
+dependencies:
+  - base
+  - servant-server
+  - split
+  - aeson
+  - string-conversions
+  - transformers
+  - either
+  - wai
+
+executables:
+  ip-manager:
+    main: ip-manager.hs
+    source-dirs:
+      - driver
+      - src
+    dependencies:
+      - warp
+      - logging-facade
+
+tests:
+  spec:
+    main: Spec.hs
+    source-dirs:
+      - test
+      - src
+    dependencies:
+      - hspec
+      - hspec-wai
+      - hspec-wai-json
+      - wai-extra

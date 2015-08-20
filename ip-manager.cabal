@@ -1,0 +1,54 @@
+-- This file has been generated from package.yaml by hpack version 0.5.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           ip-manager
+version:        0.0.0
+build-type:     Simple
+cabal-version:  >= 1.10
+
+executable ip-manager
+  main-is: ip-manager.hs
+  hs-source-dirs:
+      driver
+    , src
+  build-depends:
+      base
+    , servant-server
+    , split
+    , aeson
+    , string-conversions
+    , transformers
+    , either
+    , wai
+    , warp
+    , logging-facade
+  other-modules:
+      Api
+      App
+  default-language: Haskell2010
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+    , src
+  build-depends:
+      base
+    , servant-server
+    , split
+    , aeson
+    , string-conversions
+    , transformers
+    , either
+    , wai
+    , hspec
+    , hspec-wai
+    , hspec-wai-json
+    , wai-extra
+  other-modules:
+      AppSpec
+      Api
+      App
+  default-language: Haskell2010
