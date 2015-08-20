@@ -22,7 +22,10 @@ instance HasDatatypeInfo Options
 
 main :: IO ()
 main = do
-  options <- getArguments
+  options <- modifiedGetArguments $
+    AddShortOption "port" 'p' :
+    AddShortOption "newIp" 'n' :
+    []
   let url = BaseUrl Http (host options) (port options)
       (getListIps :<|> postNewIp) = client ipManager url
   case newIp options of
