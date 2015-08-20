@@ -1,0 +1,15 @@
+name: ip-client
+version: "0.1"
+
+executables:
+  ip-client:
+    main: ip-client.hs
+    source-dirs:
+      - src
+    dependencies:
+      - base
+      - either
+      - servant
+      - servant-client
+      - getopt-generics
+      - ip-manager

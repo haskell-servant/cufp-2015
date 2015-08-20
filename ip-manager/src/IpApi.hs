@@ -2,7 +2,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Api where
+module IpApi where
 
 import           Data.Aeson
 import           Data.List
@@ -31,14 +31,17 @@ instance ToJSON Ip where
 
 instance FromJSON Ip where
   parseJSON v = case v of
-    String s -> case splitOn "." (cs s) of
-      ws
-        | length ws == 4
-        -> maybe err return $ do
-          [a, b, c, d] <- mapM readMaybe ws
-          return $ Ip (a, b, c, d)
-      _ -> err
+    String s -> maybe err return (parseIp (cs s))
     _ -> err
     where
       err :: Monad m => m a
       err = fail (show v)
+
+parseIp :: String -> Maybe Ip
+parseIp s = case splitOn "." s of
+  ws
+    | length ws == 4
+    -> do
+      [a, b, c, d] <- mapM readMaybe ws
+      return $ Ip (a, b, c, d)
+  _ -> Nothing

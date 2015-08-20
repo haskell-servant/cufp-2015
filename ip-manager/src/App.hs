@@ -7,7 +7,7 @@ import           Control.Monad.Trans.Either
 import           Network.Wai
 import           Servant
 
-import           Api
+import           IpApi
 
 app :: IO Application
 app = do

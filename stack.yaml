@@ -1,5 +1,6 @@
 flags: {}
 packages:
-- '.'
+- ip-manager/
+- ip-client/
 extra-deps: []
 resolver: lts-3.1
