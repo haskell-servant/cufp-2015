@@ -4,6 +4,7 @@ ghc-options: -Wall
 
 dependencies:
   - base
+  - bytestring
   - servant-server
   - servant-docs
   - aeson
