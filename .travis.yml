@@ -13,10 +13,11 @@ install:
   - chmod a+x ~/.local/bin/stack
   - stack upgrade --git
   - stack --version
+  - stack setup
 
 script:
-  - stack setup
-  - stack build --test --pedantic
+  - stack build --pedantic
+  - stack test --pedantic
 
 cache:
   directories:
