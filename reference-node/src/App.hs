@@ -21,12 +21,15 @@ server mvar =
   :<|> postIp mvar)
   :<|> apiDocs
 
+-- | List all known nodes
 listIps :: MVar [Node] -> EitherT ServantErr IO [Node]
 listIps mvar = liftIO $ readMVar mvar
 
+-- | Add a new node
 postIp :: MVar [Node] -> Node -> EitherT ServantErr IO ()
 postIp mvar ip =
   liftIO $ modifyMVar_ mvar $ \ ips -> return (ips ++ [ip])
 
+-- | Get documentation describing the server API.
 apiDocs :: EitherT ServantErr IO API
 apiDocs = return $ docs ipManager'

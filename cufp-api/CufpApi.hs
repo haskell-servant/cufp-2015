@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -39,12 +40,14 @@ data Node
     host :: Host,
     port :: Port
   }
-  deriving (Show, Read, Eq, Ord, Typeable, Data, Generic)
+  deriving (Show, Read, Eq, Ord, Typeable, Data, Generic, ToJSON, FromJSON)
 
-instance ToJSON Node
 
-instance FromJSON Node
-
+-- * 'ToSample' instances
+--
+-- 'ToSample' is a class for specifying a sample of a particular datatype,
+-- which is used to generate documentation. Almost invariably, the first and
+-- second type parameters will be the same.
 instance ToSample Node Node where
     toSample _ = Just $ Node { host = "localhost", port = 8080 }
 

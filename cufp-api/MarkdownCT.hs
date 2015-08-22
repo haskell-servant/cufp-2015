@@ -8,7 +8,7 @@ import Data.ByteString.Lazy.Char8 (pack)
 import qualified Network.HTTP.Media as M
 
 
-data Markdown
+newtype Markdown = Markdown { unMarkdown :: String }
 
 instance Accept Markdown where
     contentType _ = "text" M.// "markdown" M./: ("charset", "utf-8")
