@@ -11,9 +11,10 @@ import           IpApi
 
 data Options
   = Options {
-    newIp :: Maybe String,
-    host :: String,
-    port :: Int
+    newHost :: Maybe String,
+    newPort :: Maybe Int,
+    serverHost :: String,
+    serverPort :: Int
   }
   deriving (GHC.Generics.Generic)
 
@@ -23,18 +24,19 @@ instance HasDatatypeInfo Options
 main :: IO ()
 main = do
   options <- modifiedGetArguments $
-    AddShortOption "port" 'p' :
-    AddShortOption "newIp" 'n' :
+    AddShortOption "serverHost" 'H' :
+    AddShortOption "serverPort" 'p' :
     []
-  let url = BaseUrl Http (host options) (port options)
-      (getListIps :<|> postNewIp) = client ipManager url
-  case newIp options of
-    Nothing -> do
-      ips <- try $ getListIps
-      mapM_ (putStrLn . showIp) ips
-    Just new -> do
-      ip <- maybe (die "invalid ip") return $ parseIp new
-      try $ postNewIp ip
+  let url = BaseUrl Http (serverHost options) (serverPort options)
+      (getNodes :<|> postNodesNew) = client ipManager url
+  case (newHost options, newPort options) of
+    (Nothing, Nothing) -> do
+      nodes <- try $ getNodes
+      mapM_ print nodes
+    (Just h, Just p) -> do
+      try $ postNodesNew $ Node h p
+    (Just _, Nothing) -> die "please add --new-port"
+    (Nothing, Just _) -> die "please add --new-host"
 
 try :: EitherT ServantError IO a -> IO a
 try action = do

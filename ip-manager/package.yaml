@@ -6,7 +6,6 @@ ghc-options: -Wall
 dependencies:
   - base
   - servant-server
-  - split
   - aeson
   - string-conversions
   - transformers

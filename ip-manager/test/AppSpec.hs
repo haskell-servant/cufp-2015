@@ -13,14 +13,16 @@ import           App
 
 spec :: Spec
 spec = with app $ do
-  describe "/ips" $ do
+  describe "/nodes" $ do
     it "returns an empty list" $ do
-      get "/ips" `shouldRespondWith` [json|[]|]
+      get "/nodes" `shouldRespondWith` [json|[]|]
 
-  describe "POST /new-ip" $ do
+  describe "POST /nodes/new" $ do
     it "allows to add ips" $ do
-      postJSON "/new-ip" "\"192.1.2.3\"" `shouldRespondWith` 204
-      get "/ips" `shouldRespondWith` [json|["192.1.2.3"]|]
+      postJSON "/nodes/new" "{\"host\": \"192.1.2.3\", \"port\": 8080}"
+        `shouldRespondWith` 204 {matchBody = Just ""}
+      get "/nodes" `shouldRespondWith`
+        [json|[{host: "192.1.2.3", port: 8080}]|]
 
 postJSON :: SBS -> LBS -> WaiSession SResponse
 postJSON url body =

@@ -14,7 +14,6 @@ library
   build-depends:
       base
     , servant-server
-    , split
     , aeson
     , string-conversions
     , transformers
@@ -35,7 +34,6 @@ executable ip-manager
   build-depends:
       base
     , servant-server
-    , split
     , aeson
     , string-conversions
     , transformers
@@ -58,7 +56,6 @@ test-suite spec
   build-depends:
       base
     , servant-server
-    , split
     , aeson
     , string-conversions
     , transformers
