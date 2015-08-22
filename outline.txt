@@ -1,7 +1,7 @@
 
 ## Run the script
 
-Everyone, please run `./setup.hs`!
+Everyone, please run `./setup.sh`!
 
 ## Intro to Servant
 
