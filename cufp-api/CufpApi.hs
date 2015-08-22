@@ -8,7 +8,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
-
+-- | This file describes the API for the IP manager service we'll be using.
 module CufpApi where
 
 import           Data.Aeson
@@ -19,13 +19,16 @@ import           Servant.Docs
 
 import           MarkdownCT
 
+-- | An API with two endpoints.
 type IpManager' =
        "nodes" :> Get '[JSON] [Node]
   :<|> "nodes" :> "new" :> ReqBody '[JSON] Node :> Post '[JSON] ()
 
-
+-- | Combine the two endpoints o @IpManager'@ with another one for serving
+-- documentation. This will be the entirety of the API we'll be using.
 type IpManager = IpManager' :<|> "docs" :> Get '[Markdown] API
 
+-- *  We frequently need proxies to guide instance selection of type classes.
 ipManager :: Proxy IpManager
 ipManager = Proxy
 
