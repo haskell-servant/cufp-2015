@@ -2,7 +2,7 @@ version: "0.1"
 
 executables:
   cufp-client:
-    main: cufp-client.hs
+    main: Main.hs
     source-dirs:
       - .
     dependencies:

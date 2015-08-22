@@ -14,8 +14,8 @@ dependencies:
   - cufp-api
 
 executables:
-  ip-manager:
-    main: ip-manager.hs
+  reference-node:
+    main: Main.hs
     source-dirs:
       - driver
       - src

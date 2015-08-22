@@ -1,4 +1,4 @@
--- This file has been generated from package.yaml by hpack version 0.1.2.
+-- This file has been generated from package.yaml by hpack version 0.5.4.
 --
 -- see: https://github.com/sol/hpack
 
@@ -7,11 +7,12 @@ version:        0.1
 build-type:     Simple
 cabal-version:  >= 1.10
 
-executable ip-manager
-  hs-source-dirs: driver, src
-  main-is: ip-manager.hs
-  other-modules:
-      App
+executable reference-node
+  main-is: Main.hs
+  hs-source-dirs:
+      driver
+    , src
+  ghc-options: -Wall
   build-depends:
       base
     , servant-server
@@ -22,19 +23,19 @@ executable ip-manager
     , either
     , wai
     , cufp-api
-
     , warp
     , logging-facade
-  ghc-options: -Wall
+  other-modules:
+      App
   default-language: Haskell2010
 
 test-suite spec
   type: exitcode-stdio-1.0
-  hs-source-dirs: test, src
   main-is: Spec.hs
-  other-modules:
-      AppSpec
-      App
+  hs-source-dirs:
+      test
+    , src
+  ghc-options: -Wall
   build-depends:
       base
     , servant-server
@@ -45,10 +46,11 @@ test-suite spec
     , either
     , wai
     , cufp-api
-
     , hspec
     , hspec-wai
     , hspec-wai-json
     , wai-extra
-  ghc-options: -Wall
+  other-modules:
+      AppSpec
+      App
   default-language: Haskell2010
