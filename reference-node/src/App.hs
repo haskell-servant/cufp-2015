@@ -4,9 +4,7 @@ module App where
 import           Control.Concurrent
 import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
-import           Data.Aeson (encode, decode)
 import qualified Data.Set as Set
-import qualified Data.ByteString.Lazy as BS
 import           Network.Wai
 import           Servant
 import           Servant.Docs
@@ -23,6 +21,7 @@ server mvar =
        listIps mvar
   :<|> postIp mvar
   :<|> apiDocs
+  :<|> deleteNode mvar
 
 -- | List all known nodes
 listIps :: MVar (Set.Set Node) -> EitherT ServantErr IO [Node]
@@ -32,6 +31,10 @@ listIps mvar = Set.toList <$> liftIO (readMVar mvar)
 postIp :: MVar (Set.Set Node) -> Node -> EitherT ServantErr IO ()
 postIp mvar ip =
   liftIO $ modifyMVar_ mvar $ \ ips -> return (Set.insert ip ips)
+
+deleteNode :: MVar (Set.Set Node) -> Node -> EitherT ServantErr IO ()
+deleteNode mvar node =
+  liftIO $ modifyMVar_ mvar $ \ ips -> return (Set.delete node ips)
 
 -- | Get documentation describing the server API.
 apiDocs :: EitherT ServantErr IO Markdown

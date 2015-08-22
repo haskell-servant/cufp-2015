@@ -32,6 +32,7 @@ type IpManager =
        "nodes" :> Get '[JSON] [Node]
   :<|> "nodes" :> "new" :> ReqBody '[JSON] Node :> Post '[JSON] ()
   :<|> "docs" :> Get '[Markdown] Markdown
+  :<|> "nodes" :> "delete" :> ReqBody '[JSON] Node :> Delete '[JSON] ()
 
 
 -- *  We frequently need proxies to guide instance selection of type classes.
