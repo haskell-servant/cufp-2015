@@ -15,3 +15,8 @@ Everyone, please run `./setup.sh`!
  - Client
  -
  - Server
+
+### Game
+
+Everything is fair game, e.g. invalid requests or responses are not considered
+playing dirty.
