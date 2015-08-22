@@ -1,0 +1,12 @@
+version: "0.1"
+
+ghc-options: -Wall
+
+library:
+  source-dirs:
+    - .
+  dependencies:
+    - base
+    - servant-server
+    - time
+    - containers
