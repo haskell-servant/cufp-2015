@@ -5,3 +5,6 @@ library:
     - base
     - aeson
     - servant-server
+    - servant-docs
+    - bytestring
+    - http-media

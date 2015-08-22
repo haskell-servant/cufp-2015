@@ -28,7 +28,7 @@ main = do
     AddShortOption "serverPort" 'p' :
     []
   let url = BaseUrl Http (serverHost options) (serverPort options)
-      (getNodes :<|> postNodesNew) = client ipManager url
+      (getNodes :<|> postNodesNew) = client ipManager' url
   case (newHost options, newPort options) of
     (Nothing, Nothing) -> do
       nodes <- try $ getNodes

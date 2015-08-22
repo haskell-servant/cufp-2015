@@ -1,4 +1,4 @@
--- This file has been generated from package.yaml by hpack version 0.5.4.
+-- This file has been generated from package.yaml by hpack version 0.1.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -8,9 +8,8 @@ build-type:     Simple
 cabal-version:  >= 1.10
 
 executable cufp-client
+  hs-source-dirs: .
   main-is: cufp-client.hs
-  hs-source-dirs:
-      .
   build-depends:
       getopt-generics
     , base
