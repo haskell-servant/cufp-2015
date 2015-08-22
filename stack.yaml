@@ -1,6 +1,7 @@
 flags: {}
 packages:
-- ip-manager/
-- ip-client/
+- cufp-api/
+- reference-node/
+- libclient/
 extra-deps: []
 resolver: lts-3.1

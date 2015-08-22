@@ -1,0 +1,37 @@
+-- This file has been generated from package.yaml by hpack version 0.5.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           libclient
+version:        0.1
+build-type:     Simple
+cabal-version:  >= 1.10
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base
+    , cufp-api
+    , servant
+    , servant-client
+    , either
+  exposed-modules:
+      Client
+  default-language: Haskell2010
+
+executable ip-client
+  main-is: Main.hs
+  hs-source-dirs:
+      driver
+    , src
+  build-depends:
+      base
+    , cufp-api
+    , servant
+    , servant-client
+    , either
+    , getopt-generics
+  other-modules:
+      Client
+  default-language: Haskell2010

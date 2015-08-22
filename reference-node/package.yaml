@@ -1,4 +1,3 @@
-name: ip-manager
 version: "0.1"
 
 ghc-options: -Wall
@@ -11,12 +10,7 @@ dependencies:
   - transformers
   - either
   - wai
-
-library:
-  exposed-modules:
-    IpApi
-  source-dirs:
-    - src
+  - cufp-api
 
 executables:
   ip-manager:

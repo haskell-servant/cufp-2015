@@ -1,0 +1,7 @@
+library:
+  source-dirs:
+    - .
+  dependencies:
+    - base
+    - aeson
+    - servant-server
