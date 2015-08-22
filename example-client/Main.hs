@@ -29,7 +29,7 @@ main = do
     AddShortOption "serverPort" 'p' :
     []
   let url = BaseUrl Http (serverHost options) (serverPort options)
-      ((getNodes :<|> postNodesNew) :<|> getDocs) = client ipManager url
+      (getNodes :<|> postNodesNew :<|> getDocs) = client ipManager url
   if docs options
     then do
        d <- runEitherT getDocs

@@ -11,9 +11,7 @@
 -- | This file describes the API for the IP manager service we'll be using.
 module CufpApi
   ( IpManager
-  , IpManager'
   , ipManager
-  , ipManager'
   , Node(..)
   , Host
   , Port
@@ -29,21 +27,16 @@ import           Servant.Docs
 
 import           MarkdownCT
 
--- | An API with two endpoints.
-type IpManager' =
+-- | An API with two endpoints and documentation for them.
+type IpManager =
        "nodes" :> Get '[JSON] [Node]
   :<|> "nodes" :> "new" :> ReqBody '[JSON] Node :> Post '[JSON] ()
+  :<|> "docs" :> Get '[Markdown] Markdown
 
--- | Combine the two endpoints o @IpManager'@ with another one for serving
--- documentation. This will be the entirety of the API we'll be using.
-type IpManager = IpManager' :<|> "docs" :> Get '[Markdown] Markdown
 
 -- *  We frequently need proxies to guide instance selection of type classes.
 ipManager :: Proxy IpManager
 ipManager = Proxy
-
-ipManager' :: Proxy IpManager'
-ipManager' = Proxy
 
 type Host = String
 type Port = Int
@@ -71,3 +64,7 @@ instance ToSample [Node] [Node] where
 
 instance ToSample () () where
     toSample _ = Just ()
+
+instance ToSample Markdown Markdown where
+    toSample _ = Just $ Markdown "# Sample markdown\n Lorem *ipsum*"
+

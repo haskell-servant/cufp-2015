@@ -20,8 +20,8 @@ app = do
 
 server :: MVar (Set.Set Node) -> Server IpManager
 server mvar =
-       (listIps mvar
-  :<|> postIp mvar)
+       listIps mvar
+  :<|> postIp mvar
   :<|> apiDocs
 
 -- | List all known nodes
@@ -35,7 +35,7 @@ postIp mvar ip =
 
 -- | Get documentation describing the server API.
 apiDocs :: EitherT ServantErr IO Markdown
-apiDocs = return . Markdown . markdown $ docs ipManager'
+apiDocs = return . Markdown . markdown $ docs ipManager
 
 persistNodes :: FilePath -> [Node] -> IO ()
 persistNodes fp ns = BS.writeFile fp (encode ns)
