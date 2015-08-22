@@ -1,0 +1,14 @@
+
+
+## Intro to Servant
+
+### API DSL
+
+ - Describing your API
+ - The combinators
+
+### API Interpretations
+
+ - Client
+ -
+ - Server
