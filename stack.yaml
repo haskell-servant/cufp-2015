@@ -2,6 +2,6 @@ flags: {}
 packages:
 - cufp-api/
 - reference-node/
-- libclient/
+- example-client/
 extra-deps: []
 resolver: lts-3.1

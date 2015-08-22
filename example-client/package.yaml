@@ -1,0 +1,14 @@
+version: "0.1"
+
+executables:
+  cufp-client:
+    main: cufp-client.hs
+    source-dirs:
+      - .
+    dependencies:
+      - getopt-generics
+      - base
+      - cufp-api
+      - servant
+      - servant-client
+      - either

@@ -2,11 +2,11 @@
 
 import           Control.Monad.Trans.Either
 import qualified GHC.Generics
+import           Servant.API
 import           Servant.Client
 import           System.Console.GetOpt.Generics
 import           System.Exit
 
-import           Client
 import           CufpApi
 
 data Options
@@ -27,12 +27,14 @@ main = do
     AddShortOption "serverHost" 'H' :
     AddShortOption "serverPort" 'p' :
     []
+  let url = BaseUrl Http (serverHost options) (serverPort options)
+      (getNodes :<|> postNodesNew) = client ipManager url
   case (newHost options, newPort options) of
     (Nothing, Nothing) -> do
-      nodes <- try $ getNodes (serverHost options) (serverPort options)
+      nodes <- try $ getNodes
       mapM_ print nodes
     (Just h, Just p) -> do
-      try $ postNodesNew (serverHost options) (serverPort options) $ Node h p
+      try $ postNodesNew $ Node h p
     (Just _, Nothing) -> die "please add --new-port"
     (Nothing, Just _) -> die "please add --new-host"
 
