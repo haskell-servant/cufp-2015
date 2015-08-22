@@ -67,4 +67,3 @@ instance ToSample () () where
 
 instance ToSample Markdown Markdown where
     toSample _ = Just $ Markdown "# Sample markdown\n Lorem *ipsum*"
-
