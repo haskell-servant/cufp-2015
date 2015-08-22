@@ -2,7 +2,6 @@
 
 import           Control.Monad.Trans.Either
 import qualified GHC.Generics
-import           Servant.API
 import           Servant.Client
 import           System.Console.GetOpt.Generics
 import           System.Exit
@@ -30,10 +29,10 @@ main = do
     []
   case (newHost options, newPort options) of
     (Nothing, Nothing) -> do
-      nodes <- try $ getNodes
+      nodes <- try $ getNodes (serverHost options) (serverPort options)
       mapM_ print nodes
     (Just h, Just p) -> do
-      try $ postNodesNew $ Node h p
+      try $ postNodesNew (serverHost options) (serverPort options) $ Node h p
     (Just _, Nothing) -> die "please add --new-port"
     (Nothing, Just _) -> die "please add --new-host"
 

@@ -4,7 +4,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TypeOperators #-}
 
-module IpApi where
+module CufpApi where
 
 import           Data.Aeson
 import           Data.Data
@@ -18,10 +18,13 @@ type IpManager =
 ipManager :: Proxy IpManager
 ipManager = Proxy
 
+type Host = String
+type Port = Int
+
 data Node
   = Node {
-    host :: String,
-    port :: Int
+    host :: Host,
+    port :: Port
   }
   deriving (Show, Read, Eq, Ord, Typeable, Data, Generic)
 
