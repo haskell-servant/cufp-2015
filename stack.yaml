@@ -3,5 +3,6 @@ packages:
 - cufp-api/
 - reference-node/
 - example-client/
+- node-template/
 extra-deps: []
 resolver: lts-3.1
