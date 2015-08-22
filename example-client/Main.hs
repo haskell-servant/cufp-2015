@@ -14,7 +14,8 @@ data Options
     newHost :: Maybe String,
     newPort :: Maybe Int,
     serverHost :: String,
-    serverPort :: Int
+    serverPort :: Int,
+    docs :: Bool
   }
   deriving (GHC.Generics.Generic)
 
@@ -28,15 +29,17 @@ main = do
     AddShortOption "serverPort" 'p' :
     []
   let url = BaseUrl Http (serverHost options) (serverPort options)
-      (getNodes :<|> postNodesNew) = client ipManager' url
-  case (newHost options, newPort options) of
-    (Nothing, Nothing) -> do
-      nodes <- try $ getNodes
-      mapM_ print nodes
-    (Just h, Just p) -> do
-      try $ postNodesNew $ Node h p
-    (Just _, Nothing) -> die "please add --new-port"
-    (Nothing, Just _) -> die "please add --new-host"
+      ((getNodes :<|> postNodesNew) :<|> getDocs) = client ipManager url
+  if docs options
+    then runEitherT getDocs >>= \(Right (Markdown x)) -> putStrLn x
+    else case (newHost options, newPort options) of
+      (Nothing, Nothing) -> do
+        nodes <- try $ getNodes
+        mapM_ print nodes
+      (Just h, Just p) -> do
+        try $ postNodesNew $ Node h p
+      (Just _, Nothing) -> die "please add --new-port"
+      (Nothing, Just _) -> die "please add --new-host"
 
 try :: EitherT ServantError IO a -> IO a
 try action = do

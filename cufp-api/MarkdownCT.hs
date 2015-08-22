@@ -4,18 +4,19 @@
 module MarkdownCT where
 
 import Servant
-import Servant.Docs (API, markdown)
-import Data.ByteString.Lazy.Char8 (pack)
+import Data.ByteString.Lazy.Char8 (pack, unpack)
 import qualified Network.HTTP.Media as M
 
-data Markdown
+newtype Markdown = Markdown { unMarkdown :: String }
+  deriving (Eq, Show, Read)
 
 -- | What the 'Accept' and 'Content-Type' headers should or are expected to
 -- look like
 instance Accept Markdown where
     contentType _ = "text" M.// "markdown" M./: ("charset", "utf-8")
 
--- | We declare that we know how to convert the @API@ datatype for servant-docs
--- into the 'text/markdown' content-type
-instance MimeRender Markdown API where
-    mimeRender _ = pack . markdown
+instance MimeRender Markdown Markdown where
+    mimeRender _ = pack . unMarkdown
+
+instance MimeUnrender Markdown Markdown where
+    mimeUnrender _ = return . Markdown . unpack

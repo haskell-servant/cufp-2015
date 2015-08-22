@@ -31,5 +31,5 @@ postIp mvar ip =
   liftIO $ modifyMVar_ mvar $ \ ips -> return (ips ++ [ip])
 
 -- | Get documentation describing the server API.
-apiDocs :: EitherT ServantErr IO API
-apiDocs = return $ docs ipManager'
+apiDocs :: EitherT ServantErr IO Markdown
+apiDocs = return . Markdown . markdown $ docs ipManager'
