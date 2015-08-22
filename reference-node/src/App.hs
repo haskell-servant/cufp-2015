@@ -5,6 +5,7 @@ import           Control.Concurrent
 import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
 import           Data.Aeson (encode, decode)
+import qualified Data.Set as Set
 import qualified Data.ByteString.Lazy as BS
 import           Network.Wai
 import           Servant
@@ -14,23 +15,23 @@ import           CufpApi
 
 app :: IO Application
 app = do
-  mvar <- newMVar []
+  mvar <- newMVar Set.empty
   return $ serve ipManager (server mvar)
 
-server :: MVar [Node] -> Server IpManager
+server :: MVar (Set.Set Node) -> Server IpManager
 server mvar =
        (listIps mvar
   :<|> postIp mvar)
   :<|> apiDocs
 
 -- | List all known nodes
-listIps :: MVar [Node] -> EitherT ServantErr IO [Node]
-listIps mvar = liftIO $ readMVar mvar
+listIps :: MVar (Set.Set Node) -> EitherT ServantErr IO [Node]
+listIps mvar = Set.toList <$> liftIO (readMVar mvar)
 
 -- | Add a new node
-postIp :: MVar [Node] -> Node -> EitherT ServantErr IO ()
+postIp :: MVar (Set.Set Node) -> Node -> EitherT ServantErr IO ()
 postIp mvar ip =
-  liftIO $ modifyMVar_ mvar $ \ ips -> return (ips ++ [ip])
+  liftIO $ modifyMVar_ mvar $ \ ips -> return (Set.insert ip ips)
 
 -- | Get documentation describing the server API.
 apiDocs :: EitherT ServantErr IO Markdown

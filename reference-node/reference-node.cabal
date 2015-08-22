@@ -16,6 +16,7 @@ executable reference-node
   build-depends:
       base
     , bytestring
+    , containers
     , servant-server
     , servant-docs
     , aeson
@@ -40,6 +41,7 @@ test-suite spec
   build-depends:
       base
     , bytestring
+    , containers
     , servant-server
     , servant-docs
     , aeson
