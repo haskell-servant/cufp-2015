@@ -31,7 +31,11 @@ main = do
   let url = BaseUrl Http (serverHost options) (serverPort options)
       ((getNodes :<|> postNodesNew) :<|> getDocs) = client ipManager url
   if docs options
-    then runEitherT getDocs >>= \(Right (Markdown x)) -> putStrLn x
+    then do
+       d <- runEitherT getDocs
+       case d of
+         Right (Markdown x) -> putStrLn x
+         Left err -> putStrLn $ "Could not get documentation!\n" ++ show err
     else case (newHost options, newPort options) of
       (Nothing, Nothing) -> do
         nodes <- try $ getNodes
