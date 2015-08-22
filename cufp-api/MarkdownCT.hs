@@ -8,6 +8,8 @@ import Servant.Docs (API, markdown)
 import Data.ByteString.Lazy.Char8 (pack)
 import qualified Network.HTTP.Media as M
 
+data Markdown
+
 -- | What the 'Accept' and 'Content-Type' headers should or are expected to
 -- look like
 instance Accept Markdown where
