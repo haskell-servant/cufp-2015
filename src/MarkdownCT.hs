@@ -3,9 +3,9 @@
 -- | This file defines a new content-type for markdown.
 module MarkdownCT where
 
-import Servant
-import Data.ByteString.Lazy.Char8 (pack, unpack)
+import           Data.ByteString.Lazy.Char8 (pack, unpack)
 import qualified Network.HTTP.Media as M
+import           Servant.API
 
 newtype Markdown = Markdown { unMarkdown :: String }
   deriving (Eq, Show, Read)

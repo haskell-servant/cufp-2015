@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
-module AppSpec where
+module ReferenceNodeSpec where
 
 import           Data.String.Conversions
 import           Network.Wai.Test (SResponse)
@@ -9,7 +9,7 @@ import           Test.Hspec hiding (pending)
 import           Test.Hspec.Wai
 import           Test.Hspec.Wai.JSON
 
-import           App
+import           ReferenceNode
 
 spec :: Spec
 spec = with app $ do

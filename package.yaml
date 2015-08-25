@@ -1,0 +1,61 @@
+name: cufp-api
+
+dependencies:
+    - base
+    - servant
+    - servant-docs
+    - http-media
+    - bytestring
+    - aeson
+    - servant-server
+    - wai
+
+library:
+  source-dirs:
+    - src
+  exposed-modules:
+    - CufpApi
+    - MarkdownCT
+  other-modules: []
+
+executables:
+  reference-node:
+    main: reference-node.hs
+    source-dirs:
+      - drivers
+      - src
+    dependencies:
+      - containers
+      - warp
+      - either
+      - transformers
+      - logging-facade
+
+  example-client:
+    main: example-client.hs
+    source-dirs:
+      - drivers
+      - src
+    dependencies:
+      - either
+      - servant-client
+      - getopt-generics
+
+tests:
+  spec:
+    main: Spec.hs
+    source-dirs:
+      - test
+      - drivers
+      - src
+    dependencies:
+      - hspec
+      - hspec-wai
+      - hspec-wai-json
+      - string-conversions
+      - wai-extra
+      - warp
+      - containers
+      - either
+      - transformers
+      - logging-facade

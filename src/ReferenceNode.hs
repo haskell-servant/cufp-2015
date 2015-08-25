@@ -1,6 +1,8 @@
 
-module App where
+module ReferenceNode where
 
+import           Network.Wai.Handler.Warp
+import           System.Logging.Facade as Log
 import           Control.Concurrent
 import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
@@ -10,6 +12,16 @@ import           Servant
 import           Servant.Docs
 
 import           CufpApi
+
+run :: IO ()
+run = do
+  let port = 8080
+      settings =
+        setPort port $
+        setBeforeMainLoop
+          (Log.info ("listening on port " ++ show port)) $
+        defaultSettings
+  runSettings settings =<< app
 
 app :: IO Application
 app = do
