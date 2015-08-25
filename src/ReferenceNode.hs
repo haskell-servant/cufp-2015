@@ -15,11 +15,11 @@ import           CufpApi
 
 run :: IO ()
 run = do
-  let port = 8080
+  let serverPort = 8080
       settings =
-        setPort port $
+        setPort serverPort $
         setBeforeMainLoop
-          (Log.info ("listening on port " ++ show port)) $
+          (Log.info ("listening on port " ++ show serverPort)) $
         defaultSettings
   runSettings settings =<< app
 
