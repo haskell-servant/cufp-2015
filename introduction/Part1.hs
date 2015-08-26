@@ -1,7 +1,7 @@
 
---------------------------
--- todo: official title --
---------------------------
+---------------------------------------
+-- T13: Web Programming with Servant --
+---------------------------------------
 
 -- # Outline
 
@@ -28,6 +28,7 @@ module Part1 where
 
 import           Control.Monad.Trans.Either
 import           Network.Wai
+import           Network.Wai.Handler.Warp as Warp
 import           Servant
 
 -- And it includes doctest examples.
@@ -46,7 +47,7 @@ import           Servant
 
 type SimpleGet = Get '[JSON] [Int]
 
-type SimplePost = Post '[PlainText] String
+type SimplePost = Post '[JSON] String
 
 
 -- There's two important infix operators (on the type level):
@@ -59,16 +60,56 @@ type SimplePath = "foo" :> Get '[JSON] [Int]
 
 type SimpleAlternative =
        Get '[JSON] [Int]
-  :<|> Post '[PlainText] String
+  :<|> Post '[JSON] String
 
+
+-- Of course, these operators can be combined:
+
+type Combined =
+       "list" :> Get '[JSON] [Int]
+  :<|> "list" :> "poke" :> Post '[JSON] String
 
 -- Note that so far these are just types that describe APIs
 -- There is no executable piece of code yet.
 
+-- ## Writing a Server to an API
 
--- TODO:
+-- `serve` let's us create wai `Application`s for all types that
+-- have a `HasServer` instance.
 
--- - The combinators
+type Simple = Get '[JSON] [Int]
+
+simpleApp :: Application
+simpleApp = serve simple simpleServer
+
+simple :: Proxy Simple
+simple = Proxy
+
+simpleServer :: Server Simple
+simpleServer = error "nyi"
+
+-- $ >>> :type simpleServer
+-- simpleServer :: EitherT ServantErr IO [Int]
+
+simpleRun :: IO ()
+simpleRun = Warp.run 8080 simpleApp
+
+
+-- We can change the type. We can e.g.
+-- - add a path,
+-- - change the return type,
+-- - add an endpoint.
+
+-- The typesystem will always make sure that our server always implements the
+-- specified API.
+
+
+-- from here on only notes: (TODO)
+
+-- other type combinators are possible, example: ReqBody
+-- abstraction with haskell types
+-- you can write your own combinators, but servant comes with these:
+--   (list of other combinators with examples (maybe in one big API?))
 
 -- ## API Interpretations
 
@@ -80,3 +121,5 @@ type SimpleAlternative =
 
 -- Everything is fair game, e.g. invalid requests or responses are not
 -- considered playing dirty.
+
+type Foo = EitherT
