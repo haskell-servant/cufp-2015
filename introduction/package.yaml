@@ -1,0 +1,4 @@
+library:
+  dependencies:
+    - servant
+    - servant-server
