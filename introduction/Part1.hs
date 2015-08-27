@@ -92,8 +92,8 @@ simple = Proxy
 simpleServer :: Server Simple
 simpleServer = error "nyi"
 
--- $ >>> :type simpleServer
--- simpleServer :: EitherT ServantErr IO [Int]
+-- $ >>> :type (undefined :: Server Simple)
+-- (undefined :: Server Simple) :: EitherT ServantErr IO [Int]
 
 simpleRun :: IO ()
 simpleRun = Warp.run 8080 simpleApp
@@ -107,17 +107,32 @@ simpleRun = Warp.run 8080 simpleApp
 -- The typesystem will always make sure that our server always implements the
 -- specified API.
 
+-- # Further Combinators
+
+-- `DemoReqBody` is just used to demonstrate the principle of so-called
+-- combinators in servant.
+
 data DemoReqBody a
 
-type SimpleBody = DemoReqBody Text :> Get '[JSON] Text
+-- It's an uninhabited type. It can be used in API specifications.
 
-instance HasServer api => HasServer (DemoReqBody Text :> api) where
-  type ServerT (DemoReqBody Text :> api) m = Text -> ServerT api m
+type SimpleBody = DemoReqBody :> Get '[PlainText] Text
+
+-- To be able to implement a `Server` for this API we need a `HasServer`
+-- instance. This instance -- together with its associated type (`ServerT`) --
+-- gives `DemoReqBody` its meaning. (This is also called an interpretation
+-- of the type level term.)
+
+instance HasServer api => HasServer (DemoReqBody :> api) where
+  type ServerT (DemoReqBody :> api) m = Text -> ServerT api m
   route = error "DemoReqBody.route: nyi"
 
--- >>> :type (undefined :: Server SimpleBody)
+-- The `HasServer` instances of the different combinators of the API
+-- description pin down the type of the server implementation.
+
+-- $ >>> :type (undefined :: Server SimpleBody)
 -- (undefined :: Server SimpleBody)
---   :: String -> EitherT ServantErr IO String
+--   :: Text -> EitherT ServantErr IO Text
 
 simpleBodyServer :: Server SimpleBody
 simpleBodyServer s = return $ Data.Text.reverse s
@@ -126,12 +141,12 @@ simpleBodyRun :: IO ()
 simpleBodyRun =
   Warp.run 8080 (serve (Proxy :: Proxy SimpleBody) simpleBodyServer)
 
-
+-- It's not hard to write your own combinators. But servant already provides
+-- a bunch of common combinators, e.g. `ReqBody`.
 
 
 -- from here on only notes: (TODO)
 
--- other type combinators are possible, example: ReqBody
 -- abstraction with haskell types
 -- you can write your own combinators, but servant comes with these:
 --   (list of other combinators with examples (maybe in one big API?))
