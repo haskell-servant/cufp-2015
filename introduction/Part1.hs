@@ -22,6 +22,7 @@
 -- It's a compilable Haskell module. Here's proof:
 
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
@@ -29,7 +30,9 @@
 module Part1 where
 
 import           Control.Monad.Trans.Either
-import           Data.Text
+import           Data.Aeson
+import           Data.Text hiding (filter)
+import           GHC.Generics
 import           Network.Wai
 import           Network.Wai.Handler.Warp as Warp
 import           Servant
@@ -84,16 +87,17 @@ type Combined =
 type Simple = Get '[JSON] [Int]
 
 simpleApp :: Application
-simpleApp = serve simple simpleServer
+simpleApp = serve simpleProxy simpleServer
 
-simple :: Proxy Simple
-simple = Proxy
+simpleProxy :: Proxy Simple
+simpleProxy = Proxy
 
 simpleServer :: Server Simple
 simpleServer = error "nyi"
 
--- $ >>> :type (undefined :: Server Simple)
--- (undefined :: Server Simple) :: EitherT ServantErr IO [Int]
+-- $ >>> :kind! Server Simple
+-- ...
+-- = EitherT ServantErr IO [Int]
 
 simpleRun :: IO ()
 simpleRun = Warp.run 8080 simpleApp
@@ -130,9 +134,9 @@ instance HasServer api => HasServer (DemoReqBody :> api) where
 -- The `HasServer` instances of the different combinators of the API
 -- description pin down the type of the server implementation.
 
--- $ >>> :type (undefined :: Server SimpleBody)
--- (undefined :: Server SimpleBody)
---   :: Text -> EitherT ServantErr IO Text
+-- $ >>> :kind! Server SimpleBody
+-- ...
+-- = Text -> EitherT ServantErr IO Text
 
 simpleBodyServer :: Server SimpleBody
 simpleBodyServer s = return $ Data.Text.reverse s
@@ -144,22 +148,107 @@ simpleBodyRun =
 -- It's not hard to write your own combinators. But servant already provides
 -- a bunch of common combinators, e.g. `ReqBody`.
 
+-- $ >>> :kind! Server (ReqBody '[JSON] Text :> Post '[JSON] ())
+-- ...
+-- = Text -> EitherT ServantErr IO ()
 
--- from here on only notes: (TODO)
 
--- abstraction with haskell types
--- you can write your own combinators, but servant comes with these:
---   (list of other combinators with examples (maybe in one big API?))
+-- We already know the path combinator. It doesn't change the
+-- type of the server.
 
--- ## API Interpretations
+-- $ >>> :kind! Server ("path" :> Get '[JSON] ())
+-- ...
+-- = EitherT ServantErr IO ()
 
--- - Client
--- -
--- - Server
 
--- # Game
+-- The `QueryParam` combinator allows to retrieve query parameters.
+
+-- $ >>> :kind! Server (QueryParam "key" Text :> Get '[JSON] ())
+-- ...
+-- = Maybe Text -> EitherT ServantErr IO ()
+
+
+-- There are two other variants for query parameters.
+
+-- $ >>> :kind! Server (QueryParams "keys" Text :> Get '[JSON] ())
+-- ...
+-- = [Text] -> EitherT ServantErr IO ()
+
+-- $ >>> :kind! Server (QueryFlag "flag" :> Get '[JSON] ())
+-- ...
+-- = Bool -> EitherT ServantErr IO ()
+
+
+-- There's the `Capture` combinator to extract values from the
+-- url path.
+
+-- $ >>> :kind! Server (Capture "flag" Text :> Get '[JSON] ())
+-- ...
+-- = Text -> EitherT ServantErr IO ()
+
+
+-- # A Slightly Bigger Example
+
+-- Our domain:
+
+data Person
+  = Person {
+    name :: String,
+    age :: Int
+  }
+  deriving (Show, Eq, Ord, Generic)
+
+alice :: Person
+alice = Person "alice" 1
+
+bob :: Person
+bob = Person "bob" 2
+
+allPersons :: [Person]
+allPersons = [alice, bob]
+
+-- Here's our API:
+
+type Example =
+       "persons" :> Get '[JSON] [Person]
+  :<|> "person" :> Capture "name" String :> Get '[JSON] Person
+
+exampleProxy :: Proxy Example
+exampleProxy = Proxy
+
+-- Our server implementation:
+
+exampleRun :: IO ()
+exampleRun = Warp.run 8080 (serve exampleProxy exampleServer)
+
+exampleServer :: Server Example
+exampleServer =
+       (return [alice, bob])
+  :<|> getPerson
+
+-- Handler implementations:
+
+getPerson :: String -> EitherT ServantErr IO Person
+getPerson n = case filter (\ p -> name p == n) allPersons of
+  [p] -> return p
+  _ -> left err404
+
+instance ToJSON Person
+
+-- todo (sönke):
+-- - Class constraints for serialization, etc..
+-- - abstraction with type synonyms
+
+-- todo (julian):
+-- - content-types
+-- - other interpretations
+--   - client
+--   - docs
+--   - others?
+-- - something else?
+
+
+-- # Coding
 
 -- Everything is fair game, e.g. invalid requests or responses are not
 -- considered playing dirty.
-
-type Foo = EitherT
