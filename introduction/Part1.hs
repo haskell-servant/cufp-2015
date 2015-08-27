@@ -22,14 +22,18 @@
 -- It's a compilable Haskell module. Here's proof:
 
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
 
 module Part1 where
 
 import           Control.Monad.Trans.Either
+import           Data.Text
 import           Network.Wai
 import           Network.Wai.Handler.Warp as Warp
 import           Servant
+import           Servant.API.ContentTypes ()
 
 -- And it includes doctest examples.
 
@@ -102,6 +106,27 @@ simpleRun = Warp.run 8080 simpleApp
 
 -- The typesystem will always make sure that our server always implements the
 -- specified API.
+
+data DemoReqBody a
+
+type SimpleBody = DemoReqBody Text :> Get '[JSON] Text
+
+instance HasServer api => HasServer (DemoReqBody Text :> api) where
+  type ServerT (DemoReqBody Text :> api) m = Text -> ServerT api m
+  route = error "DemoReqBody.route: nyi"
+
+-- >>> :type (undefined :: Server SimpleBody)
+-- (undefined :: Server SimpleBody)
+--   :: String -> EitherT ServantErr IO String
+
+simpleBodyServer :: Server SimpleBody
+simpleBodyServer s = return $ Data.Text.reverse s
+
+simpleBodyRun :: IO ()
+simpleBodyRun =
+  Warp.run 8080 (serve (Proxy :: Proxy SimpleBody) simpleBodyServer)
+
+
 
 
 -- from here on only notes: (TODO)
