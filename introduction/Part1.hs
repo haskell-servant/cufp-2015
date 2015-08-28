@@ -17,7 +17,7 @@
 
 -- # Introduction
 
--- ## How his introduction works
+-- ## How this introduction works
 
 -- It's a compilable Haskell module. Here's proof:
 
