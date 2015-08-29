@@ -1,7 +1,6 @@
--- # Content-Types
---
+-- # Content-Types {{{
 ------------------------------------------------------------------------------
--- ## Preamble
+-- ## Preamble {{{
 --
 -- The content-type list remains a little mysterious. How does servant know how
 -- to serialize and deserialize data? In this file, we answer that question,
@@ -23,8 +22,9 @@ import           Data.Proxy
 import qualified Network.HTTP.Media   as M
 import           Servant.API
 
+-- }}}
 ------------------------------------------------------------------------------
--- ## Declaring a datatype for MIME types
+-- ## Declaring a datatype for MIME types {{{
 --
 -- We need a new datatype that we can put in the content-type list. Let's do
 -- PNG.
@@ -38,8 +38,9 @@ instance Accept PNG where
 -- Now servant knows how to match against `Accept` headers in the request, and
 -- what to place as the `Content-Type` v
 --
+-- }}}
 ------------------------------------------------------------------------------
--- ## MimeRender
+-- ## MimeRender {{{
 --
 -- Now we need to say how, when we get request that accepts "image/png", we
 -- should serialize the datatype. We do that by declaring the datatype an
@@ -52,11 +53,22 @@ instance MimeRender PNG DynamicImage where
 
 type RenderPNGApi = Get '[PNG] DynamicImage
 
+-- }}}
 ------------------------------------------------------------------------------
--- ## MimeUnrender
+-- ## MimeUnrender {{{
 --
 -- Similarly we can declare how to deserialize a request of content-type
 -- "image/png" into a 'DynamicImage'.
 
 instance MimeUnrender PNG DynamicImage where
     mimeUnrender _ = decodePng . BL.toStrict
+
+-- }}}
+------------------------------------------------------------------------------
+-- ## Conversion {{{
+--
+-- Timo's servant-JuicyPixels already has these instances, and many more
+-- besides
+
+-- }}}
+-- }}}

@@ -1,7 +1,6 @@
--- # servant-client and servant-docs
---
+-- # servant-client and servant-docs {{{
 ------------------------------------------------------------------------------
--- ## Preamble
+-- ## Preamble {{{
 --
 -- Imports, pragmas, and some APIs to play around with.
 {-# LANGUAGE TypeOperators #-}
@@ -33,8 +32,9 @@ type SimpleWithCapture =
 simpleWithCapture :: Proxy SimpleWithCapture
 simpleWithCapture = Proxy
 
+-- }}}
 ------------------------------------------------------------------------------
--- ## Introduction
+-- ## Introduction {{{
 
 -- If API descriptions are expressions of a DSL, what are their
 -- interpretations?
@@ -44,8 +44,9 @@ simpleWithCapture = Proxy
 -- hand has many.
 --
 
+-- }}}
 ------------------------------------------------------------------------------
--- ## Docs
+-- ## Docs {{{
 -- The simplest is documentation-generation.
 --
 
@@ -96,9 +97,9 @@ instance Docs.ToSample Int Int where
 -- 1729
 -- ```
 
-
+-- }}}
 ------------------------------------------------------------------------------
--- ## Client
+-- ## Client {{{
 --
 -- Another interpretation of the API is client function generation. The
 -- 'Client.client' function generates one function for each endpoint in the
@@ -130,9 +131,9 @@ simpleWithCaptureMain = forkIO $ run 8001 $ serve simpleWithCapture (l :<|> r)
 -- Notice how 's2' has type @Int -> EitherT Client.ServantError IO ()@.
 -- servant-client produces client functions of the appropriate type. Captures,
 -- request bodies, headers, all become arguments to client functions.
---
+-- }}}
 ------------------------------------------------------------------------------
--- # Other Interpretations
+-- # Other Interpretations {{{
 --
 -- Documentation and Haskell client libraries are by no means the only
 -- interesting interpretations of the servant DSL. There's the server
@@ -140,3 +141,5 @@ simpleWithCaptureMain = forkIO $ run 8001 $ serve simpleWithCapture (l :<|> r)
 -- javascript client generation (with servant-jquery, which will soon be
 -- renamed to servant-js) and the servant-mock (which generates a server that
 -- matches a specification but that just send arbitrary data).
+-- }}}
+-- }}}
