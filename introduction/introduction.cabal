@@ -1,4 +1,4 @@
--- This file has been generated from package.yaml by hpack version 0.5.4.
+-- This file has been generated from package.yaml by hpack version 0.1.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -9,12 +9,18 @@ cabal-version:  >= 1.10
 
 library
   build-depends:
-      base == 4.8
+      base
     , either
+    , bytestring
     , servant
-    , servant-server
-    , servant-docs
     , servant-client
+    , servant-docs
+    , servant-server
+    , JuicyPixels
+    , http-media
+    , wai
+    , warp
+    , servant-JuicyPixels
     , transformers
     , warp
   default-language: Haskell2010

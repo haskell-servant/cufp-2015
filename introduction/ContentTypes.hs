@@ -1,14 +1,19 @@
 -- # Content-Types {{{
 ------------------------------------------------------------------------------
 -- ## Preamble {{{
---
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
 module ContentTypes where
 
 import           Codec.Picture
 import           Codec.Picture.Saving
+import qualified Data.ByteString.Lazy     as BL
 import           Data.Proxy
-import qualified Network.HTTP.Media   as M
-import           Servant.API
+import qualified Network.HTTP.Media       as M
+import           Network.Wai              (Application)
+import           Network.Wai.Handler.Warp (run)
+import           Servant
+import qualified Servant.JuicyPixels      as JP
 
 -- }}}
 ------------------------------------------------------------------------------
@@ -72,7 +77,31 @@ instance MimeUnrender PNG DynamicImage where
 -- ## Conversion {{{
 --
 -- Timo's servant-JuicyPixels already has these instances, and many more
--- besides
+-- besides. Let's take them out for a test spin.
 
+-- A single endpoint, which expects and returns the same type, but in a variety
+-- of content-types
+type ConversionApi
+     = ReqBody '[JP.BMP, JP.GIF, JP.JPEG 50, JP.PNG, JP.TIFF, JP.RADIANCE] DynamicImage
+    :> Post '[JP.BMP, JP.GIF, JP.JPEG 50, JP.PNG, JP.TIFF, JP.RADIANCE] DynamicImage
+
+conversionApi :: Proxy ConversionApi
+conversionApi = Proxy
+
+-- Whatever we get, we return.
+server :: Server ConversionApi
+server = return
+
+conversion :: Application
+conversion = serve conversionApi server
+
+main :: IO ()
+main = run 8001 conversion
+
+-- Try it out!
+-- $ curl localhost:8001 -H "Content-Type: image/png"  \
+--                       -H "Accept: image/jpeg"  \
+--                       --data-binary "@haskell-logo.png" \
+--                       > haskell-logo.jpeg
 -- }}}
 -- }}}
