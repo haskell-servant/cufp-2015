@@ -9,12 +9,16 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module ClientAndDocs where
 
+import Network.Wai.Handler.Warp (run)
+import Control.Monad.Trans.Either
+import Control.Monad.IO.Class (liftIO)
+import Control.Concurrent
+
 import Servant
 -- Qualified imports are not necessary, but will help make clear where
 -- functions and datatypes we use are coming from.
 import qualified Servant.Docs  as Docs
 import qualified Servant.Client as Client
-import Control.Monad.Trans.Either
 
 
 type SimpleApi = "simple" :> Get '[JSON] Int
@@ -26,7 +30,7 @@ type SimpleWithCapture =
         SimpleApi
    :<|> "int" :> Capture "favourite number" Int :> Get '[JSON] ()
 
-simpleWithCapture :: Proxy (SimpleApi :<|> SimpleWithCapture)
+simpleWithCapture :: Proxy SimpleWithCapture
 simpleWithCapture = Proxy
 
 ------------------------------------------------------------------------------
@@ -103,4 +107,36 @@ instance Docs.ToSample Int Int where
 s :: EitherT Client.ServantError IO Int
 s = Client.client simpleApi (Client.BaseUrl Client.Http "localhost" 8000)
 
+-- To test this out, let's run a simple server:
+simpleApiMain :: IO ThreadId
+simpleApiMain = forkIO $ run 8000 $ serve simpleApi $ return 5
 
+-- And it works!
+-- $ >>> runEitherT s
+-- Right 5
+
+-- When there are multiple endpoints, we get each of them by pattern matching
+-- against ':<|>':
+s1 :: EitherT Client.ServantError IO Int
+s2 :: Int -> EitherT Client.ServantError IO ()
+s1 :<|> s2 = Client.client simpleWithCapture (Client.BaseUrl Client.Http "localhost" 8001)
+
+-- And here's a server to test it out
+simpleWithCaptureMain :: IO ThreadId
+simpleWithCaptureMain = forkIO $ run 8001 $ serve simpleWithCapture (l :<|> r)
+  where l = return 5
+        r = liftIO . print
+
+-- Notice how 's2' has type @Int -> EitherT Client.ServantError IO ()@.
+-- servant-client produces client functions of the appropriate type. Captures,
+-- request bodies, headers, all become arguments to client functions.
+--
+------------------------------------------------------------------------------
+-- # Other Interpretations
+--
+-- Documentation and Haskell client libraries are by no means the only
+-- interesting interpretations of the servant DSL. There's the server
+-- interpretation, which warrants a separate discussion. But there's also
+-- javascript client generation (with servant-jquery, which will soon be
+-- renamed to servant-js) and the servant-mock (which generates a server that
+-- matches a specification but that just send arbitrary data).

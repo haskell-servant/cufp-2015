@@ -15,4 +15,6 @@ library
     , servant-server
     , servant-docs
     , servant-client
+    , transformers
+    , warp
   default-language: Haskell2010
