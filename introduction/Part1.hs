@@ -29,9 +29,12 @@
 
 module Part1 where
 
+import           Control.Concurrent
+import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
 import           Data.Aeson
-import           Data.Text hiding (filter)
+import           Data.List
+import           Data.Text hiding (filter, isInfixOf)
 import           GHC.Generics
 import           Network.Wai
 import           Network.Wai.Handler.Warp as Warp
@@ -198,6 +201,8 @@ data Person
   }
   deriving (Show, Eq, Ord, Generic)
 
+instance ToJSON Person
+
 alice :: Person
 alice = Person "alice" 1
 
@@ -212,6 +217,7 @@ allPersons = [alice, bob]
 type Example =
        "persons" :> Get '[JSON] [Person]
   :<|> "person" :> Capture "name" String :> Get '[JSON] Person
+  :<|> "persons" :> "search" :> QueryParam "q" String :> Get '[JSON] [Person]
 
 exampleProxy :: Proxy Example
 exampleProxy = Proxy
@@ -223,8 +229,9 @@ exampleRun = Warp.run 8080 (serve exampleProxy exampleServer)
 
 exampleServer :: Server Example
 exampleServer =
-       (return [alice, bob])
+       (return allPersons)
   :<|> getPerson
+  :<|> searchPerson
 
 -- Handler implementations:
 
@@ -233,11 +240,39 @@ getPerson n = case filter (\ p -> name p == n) allPersons of
   [p] -> return p
   _ -> left err404
 
-instance ToJSON Person
+searchPerson :: Maybe String -> EitherT ServantErr IO [Person]
+searchPerson (Just query) = return $
+  filter (\ person -> query `isInfixOf` name person) allPersons
+searchPerson Nothing = left $ err400
 
--- todo (sönke):
--- - Class constraints for serialization, etc..
--- - abstraction with type synonyms
+
+-- Some random thoughts:
+
+-- Most combinators come with some class constraints for
+-- serialization or deserialization. Try out:
+
+-- :<|> "persons" :> "add" :> ReqBody '[JSON] Person :> Post '[JSON] ()
+
+
+-- A handle to e.g. a database connection could easily be passed in as
+-- arguments to the individual handlers (and the whole server).
+-- Personally I like this approach very much because it's
+-- - very simple and easy to understand and
+-- - it's very explicit which handlers can perform which kinds of
+--   side-effects.
+
+
+-- Haskell's normal means of abstracting types can be used to structure API
+-- specifications:
+
+type MainApi =
+       PublicApi
+  :<|> AdminApi
+
+type PublicApi = Get '[JSON] ()
+type AdminApi = Get '[JSON] ()
+
+
 
 -- todo (julian):
 -- - content-types
