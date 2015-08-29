@@ -60,7 +60,3 @@ type RenderPNGApi = Get '[PNG] DynamicImage
 
 instance MimeUnrender PNG DynamicImage where
     mimeUnrender _ = decodePng . BL.toStrict
-
--- Which in turn means we can accept request bodies of type 'DynamicImage'
--- with content-type "image/png".
-type PNGApi = ReqBody '[PNG] DynamicImage :> Get '[PNG] DynamicImage
