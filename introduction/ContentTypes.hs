@@ -2,6 +2,18 @@
 ------------------------------------------------------------------------------
 -- ## Preamble {{{
 --
+module ContentTypes where
+
+import           Codec.Picture
+import           Codec.Picture.Saving
+import           Data.Proxy
+import qualified Network.HTTP.Media   as M
+import           Servant.API
+
+-- }}}
+------------------------------------------------------------------------------
+-- ## Introduction {{{
+--
 -- The content-type list remains a little mysterious. How does servant know how
 -- to serialize and deserialize data? In this file, we answer that question,
 -- and show how easy it is to add new content-types.
@@ -14,14 +26,6 @@
 --
 -- Much of the code in this module is inspired by, or directly taken from,
 -- Timo von Holz's servant-JuicyPixels package
-module ContentTypes where
-
-import           Codec.Picture
-import           Codec.Picture.Saving
-import           Data.Proxy
-import qualified Network.HTTP.Media   as M
-import           Servant.API
-
 -- }}}
 ------------------------------------------------------------------------------
 -- ## Declaring a datatype for MIME types {{{
