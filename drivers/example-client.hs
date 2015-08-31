@@ -29,7 +29,7 @@ main = do
     AddShortOption "serverPort" 'p' :
     []
   let url = BaseUrl Http (serverHost options) (serverPort options)
-      (getNodes :<|> postNodesNew :<|> getDocs :<|> _) = client nodeManager url
+      (getNodes :<|> postNodesNew :<|> getDocs :<|> _) = client cufpApi url
   if docs options
     then do
        d <- runEitherT getDocs
