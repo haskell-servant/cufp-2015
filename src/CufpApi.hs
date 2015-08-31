@@ -13,8 +13,6 @@ module CufpApi
   ( CufpApi
   , cufpApi
   , Node(..)
-  , Host
-  , Port
   , Markdown(..)
   ) where
 
@@ -39,13 +37,10 @@ type CufpApi =
 cufpApi :: Proxy CufpApi
 cufpApi = Proxy
 
-type Host = String
-type Port = Int
-
 data Node
   = Node {
-    host :: Host,
-    port :: Port
+    host :: String,
+    port :: Int
   }
   deriving (Show, Read, Eq, Ord, Typeable, Data, Generic, ToJSON, FromJSON)
 
