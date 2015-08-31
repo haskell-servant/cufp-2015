@@ -16,6 +16,8 @@ library:
   exposed-modules:
     - CufpApi
     - MarkdownCT
+    - ChatApi
+    - ChatApp
   other-modules: []
 
 executables:
