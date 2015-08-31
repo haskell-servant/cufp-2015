@@ -10,9 +10,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 -- | This file describes the API for the IP manager service we'll be using.
 module CufpApi
-  ( CufpApi
-  , cufpApi
-  , Node(..)
+  ( module CufpApi
   , Markdown(..)
   ) where
 
