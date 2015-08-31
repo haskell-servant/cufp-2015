@@ -26,9 +26,9 @@ run = do
 app :: IO Application
 app = do
   mvar <- newMVar Set.empty
-  return $ serve ipManager (server mvar)
+  return $ serve nodeManager (server mvar)
 
-server :: MVar (Set.Set Node) -> Server IpManager
+server :: MVar (Set.Set Node) -> Server NodeManager
 server mvar =
        listIps mvar
   :<|> postIp mvar
@@ -50,4 +50,4 @@ deleteNode mvar node =
 
 -- | Get documentation describing the server API.
 apiDocs :: EitherT ServantErr IO Markdown
-apiDocs = return . Markdown . markdown $ docs ipManager
+apiDocs = return . Markdown . markdown $ docs nodeManager

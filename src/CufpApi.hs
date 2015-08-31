@@ -10,8 +10,8 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 -- | This file describes the API for the IP manager service we'll be using.
 module CufpApi
-  ( IpManager
-  , ipManager
+  ( NodeManager
+  , nodeManager
   , Node(..)
   , Host
   , Port
@@ -28,7 +28,7 @@ import           Servant.Docs
 import           MarkdownCT
 
 -- | An API with two endpoints and documentation for them.
-type IpManager =
+type NodeManager =
        "nodes" :> Get '[JSON] [Node]
   :<|> "nodes" :> "new" :> ReqBody '[JSON] Node :> Post '[JSON] ()
   :<|> "docs" :> Get '[Markdown] Markdown
@@ -36,8 +36,8 @@ type IpManager =
 
 
 -- *  We frequently need proxies to guide instance selection of type classes.
-ipManager :: Proxy IpManager
-ipManager = Proxy
+nodeManager :: Proxy NodeManager
+nodeManager = Proxy
 
 type Host = String
 type Port = Int
