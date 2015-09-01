@@ -1,11 +1,19 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Lambda.Logic where
-import Data.Maybe (fromJust)
+
+import           Data.Aeson
 import qualified Data.Map as Map
+import           Data.Maybe (fromJust)
+import           GHC.Generics
 
 data Term = Var String
           | Lambda String Term
           | App (Term, Term)
-    deriving (Show, Eq)
+  deriving (Show, Read, Eq, Ord, Generic)
+
+instance ToJSON Term
+instance FromJSON Term
 
 
 type Env = Map.Map String Term

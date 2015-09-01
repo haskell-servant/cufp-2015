@@ -45,6 +45,11 @@ executable reference-node
     , logging-facade
   other-modules:
       CufpApi
+      Lambda.Api
+      Lambda.Client.Basics
+      Lambda.Client.Nats
+      Lambda.Logic
+      Lambda.Server
       MarkdownCT
       ReferenceNode
   default-language: Haskell2010
@@ -68,6 +73,11 @@ executable example-client
     , getopt-generics
   other-modules:
       CufpApi
+      Lambda.Api
+      Lambda.Client.Basics
+      Lambda.Client.Nats
+      Lambda.Logic
+      Lambda.Server
       MarkdownCT
       ReferenceNode
   default-language: Haskell2010
@@ -101,6 +111,11 @@ test-suite spec
   other-modules:
       ReferenceNodeSpec
       CufpApi
+      Lambda.Api
+      Lambda.Client.Basics
+      Lambda.Client.Nats
+      Lambda.Logic
+      Lambda.Server
       MarkdownCT
       ReferenceNode
   default-language: Haskell2010
