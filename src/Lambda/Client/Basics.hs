@@ -10,7 +10,7 @@ import           System.Exit
 import           Lambda.Api
 
 url :: BaseUrl
-url = BaseUrl Http "jkarni.com" 8100
+url = BaseUrl Http "localhost" 9000
 
 type M a = EitherT ServantError IO a
 

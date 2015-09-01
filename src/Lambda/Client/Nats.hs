@@ -9,7 +9,7 @@ import           Lambda.Client.Basics hiding (main)
 
 main :: IO ()
 main = do
-  result <- try $ ((add # nat 0) # nat 0)
+  result <- try $ ((add # nat 3) # nat 4)
   putStrLn $ pretty result
   e <- try $ eval result
   putStrLn $ pretty e
@@ -25,7 +25,7 @@ nat n =
     inner x | x > 0 = var "s" # inner (pred x)
     inner _ = liftIO $ die "nat: negative number"
 
--- \ a -> \ b -> \ s -> \ z -> (a s) b
+-- \ a -> \ b -> \ s -> \ z -> (a s) (b s z)
 add :: M Term
 add = lambda "a" (lambda "b" (lambda "s" (lambda "z"
-  ((var "a" # var "s") # var "b"))))
+  ((var "a" # var "s") # ((var "b" # var "s") # var "z")))))

@@ -1,15 +1,7 @@
 
 module Main where
 
-import           Network.Wai.Handler.Warp
-import           Servant
-
-import           Lambda.Api
+import           Lambda.Server
 
 main :: IO ()
-main = run 8080 (serve lambdaApi server)
-
-server :: Server LambdaApi
-server =
-       _
-  :<|> _
+main = runServer 9000

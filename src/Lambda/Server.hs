@@ -20,10 +20,10 @@ lambda :: String -> Term -> EitherT ServantErr IO Term
 lambda s = return . Lambda s
 
 app :: (Term, Term) -> EitherT ServantErr IO Term
-app = return . App
+app (f, x) = return $ App f x
 
 eval' :: Term -> EitherT ServantErr IO Term
-eval' t = return $ eval mempty t
+eval' t = return $ eval t
 
 runServer :: Port -> IO ()
 runServer p = run p $ serve lambdaApi lambdaServer

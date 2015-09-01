@@ -2,31 +2,42 @@
 
 module Lambda.Logic where
 
+import           Control.Applicative
 import           Data.Aeson
-import qualified Data.Map as Map
-import           Data.Maybe (fromJust)
 import           GHC.Generics
 
 data Term = Var String
           | Lambda String Term
-          | App (Term, Term)
+          | App Term Term
   deriving (Show, Read, Eq, Ord, Generic)
 
 pretty :: Term -> String
 pretty (Var x) = x
 pretty (Lambda x t) = "(\\" ++ x ++ " -> " ++ pretty t ++ ")"
-pretty (App (x,t)) = pretty x ++ " " ++ pretty t
+pretty (App x t) = "(" ++ pretty x ++ ") " ++ pretty t
 
 instance ToJSON Term
 instance FromJSON Term
 
+eval :: Term -> Term
+eval x = case step x of
+  Nothing -> x
+  Just next -> eval next
 
-type Env = Map.Map String Term
+step :: Term -> Maybe Term
+step t = case t of
+  Var _ -> Nothing
+  Lambda v e -> Lambda v <$> step e
+  App (Lambda v e) argument ->
+    Just (replace v argument e)
+  App f x ->
+    (App <$> step f <*> pure x) <|>
+    (App <$> pure f <*> step x)
 
-eval :: Env -> Term -> Term
-eval env (App (Lambda s t, t2)) = let t2' = eval env t2 in eval (Map.insert s t2' env) t
-eval env (App (x, t)) = case eval env x of
-    l@(Lambda _ _) -> eval env (App (l, t))
-    _ -> error $ pretty x
-eval env (Var x) = fromJust $ Map.lookup x env
-eval _ (Lambda s t) = Lambda s t
+replace :: String -> Term -> Term -> Term
+replace needle argument e = case e of
+  Var v | v == needle -> argument
+  Var _ -> e
+  Lambda v body | v == needle -> Lambda v body
+  Lambda v body -> Lambda v (replace needle argument body)
+  App a b -> App (replace needle argument a) (replace needle argument b)
