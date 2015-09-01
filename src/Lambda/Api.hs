@@ -1,7 +1,11 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Lambda.Api where
+module Lambda.Api (
+  module Lambda.Api,
+  Term,
+  pretty,
+ ) where
 
 import           Data.Proxy
 import           Servant.API

@@ -14,8 +14,8 @@ data Term = Var String
 
 pretty :: Term -> String
 pretty (Var x) = x
-pretty (Lambda x t) = "\\" ++ x ++ " -> " ++ pretty t
-pretty (App (x,t)) = "(" ++ pretty x ++ ") " ++ pretty t
+pretty (Lambda x t) = "(\\" ++ x ++ " -> " ++ pretty t ++ ")"
+pretty (App (x,t)) = pretty x ++ " " ++ pretty t
 
 instance ToJSON Term
 instance FromJSON Term

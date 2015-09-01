@@ -1,33 +1,31 @@
 
 module Lambda.Client.Nats where
 
-import           Control.Monad.Trans.Either
+import           Control.Monad.IO.Class
 import           System.Exit
 
-import           Lambda.Client.Basics
-import           Lambda.Logic
+import           Lambda.Api
+import           Lambda.Client.Basics hiding (main)
 
 main :: IO ()
 main = do
-  result <- try $ ((add # nat 3) # nat 4)
-  print result
-
-try :: M a -> IO a
-try action = do
-  r <- runEitherT action
-  either (die . show) return r
+  result <- try $ ((add # nat 0) # nat 0)
+  putStrLn $ pretty result
+  e <- try $ eval result
+  putStrLn $ pretty e
 
 zero :: M Term
-zero = do
-  zVar <- var "z"
-  s <- lambda "z" zVar 
-  lambda "s" s
+zero = lambda "s" (lambda "z" (var "z"))
 
 nat :: Integer -> M Term
-nat 0 = zero
+nat n =
+  lambda "s" (lambda "z" (inner n))
+  where
+    inner 0 = var "z"
+    inner x | x > 0 = var "s" # inner (pred x)
+    inner _ = liftIO $ die "nat: negative number"
 
+-- \ a -> \ b -> \ s -> \ z -> (a s) b
 add :: M Term
-add = wrapNat _
-
-wrapNat :: (Term -> Term -> M Term) -> M Term
-wrapNat = _
+add = lambda "a" (lambda "b" (lambda "s" (lambda "z"
+  ((var "a" # var "s") # var "b"))))
