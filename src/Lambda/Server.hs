@@ -2,7 +2,6 @@ module Lambda.Server where
 
 import Lambda.Api
 import Lambda.Logic
-import Control.Monad.Trans.Either
 import Network.Wai.Handler.Warp
 import Servant
 
@@ -13,16 +12,16 @@ lambdaServer = var
           :<|> app
           :<|> eval'
 
-var :: String -> EitherT ServantErr IO Term
+var :: Monad m => String -> m Term
 var = return . Var
 
-lambda :: String -> Term -> EitherT ServantErr IO Term
+lambda :: Monad m => String -> Term -> m Term
 lambda s = return . Lambda s
 
-app :: (Term, Term) -> EitherT ServantErr IO Term
+app :: Monad m => (Term, Term) -> m Term
 app (f, x) = return $ App f x
 
-eval' :: Term -> EitherT ServantErr IO Term
+eval' :: Monad m => Term -> m Term
 eval' t = return $ eval t
 
 runServer :: Port -> IO ()

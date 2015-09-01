@@ -5,7 +5,6 @@ import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
 import           Servant.API
 import           Servant.Client
-import           System.Exit
 
 import           Lambda.Api
 
@@ -13,11 +12,6 @@ url :: BaseUrl
 url = BaseUrl Http "localhost" 9000
 
 type M a = EitherT ServantError IO a
-
-try :: M a -> IO a
-try action = do
-  r <- runEitherT action
-  either (die . show) return r
 
 -- * api functions
 
@@ -40,9 +34,8 @@ identity :: M Term
 identity = lam "x" (var "x")
 
 main :: IO ()
-main = do
-  try $ do
-    c <- (identity # identity)
-    liftIO $ print c
-    r <- eval c
-    liftIO $ print r
+main = eitherT (error . show) return $ do
+  c <- (identity # identity)
+  liftIO $ print c
+  r <- eval c
+  liftIO $ print r
