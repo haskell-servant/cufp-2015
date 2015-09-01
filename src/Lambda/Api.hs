@@ -5,6 +5,7 @@ module Lambda.Api (
   module Lambda.Api,
   Term,
   pretty,
+  toNat,
  ) where
 
 import           Data.Proxy

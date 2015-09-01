@@ -13,6 +13,7 @@ main = do
   putStrLn $ pretty result
   e <- try $ eval result
   putStrLn $ pretty e
+  print $ toNat e
 
 zero :: M Term
 zero = lambda "s" (lambda "z" (var "z"))

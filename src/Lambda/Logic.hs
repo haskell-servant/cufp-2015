@@ -16,6 +16,16 @@ pretty (Var x) = x
 pretty (Lambda x t) = "(\\" ++ x ++ " -> " ++ pretty t ++ ")"
 pretty (App x t) = "(" ++ pretty x ++ ") " ++ pretty t
 
+toNat :: Term -> Maybe Integer
+toNat (Lambda s (Lambda z e)) = inner e
+  where
+    inner x = case x of
+      Var v | v == z -> Just 0
+      Var _ -> Nothing
+      App (Var v) r | v == s -> succ <$> inner r
+      _ -> Nothing
+toNat _ = Nothing
+
 instance ToJSON Term
 instance FromJSON Term
 
@@ -40,4 +50,4 @@ replace needle argument e = case e of
   Var _ -> e
   Lambda v body | v == needle -> Lambda v body
   Lambda v body -> Lambda v (replace needle argument body)
-  App a b -> App (replace needle argument a) (replace needle argument b)
+  App f x -> App (replace needle argument f) (replace needle argument x)
