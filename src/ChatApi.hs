@@ -1,5 +1,6 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
--- {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE DeriveGeneric #-}
 module ChatApi where
 
@@ -21,7 +22,7 @@ instance FromJSON Message where
     parseJSON x = SimpleMessage <$> parseJSON x
 
 type ChatApi
-  = "to" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[] ()
+  = "from" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
 
 chatApi :: Proxy ChatApi
 chatApi = Proxy
