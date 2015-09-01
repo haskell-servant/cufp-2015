@@ -13,7 +13,6 @@ lambdaServer = var
           :<|> app
           :<|> eval'
 
-
 var :: String -> EitherT ServantErr IO Term
 var = return . Var
 
@@ -28,4 +27,3 @@ eval' t = return $ eval mempty t
 
 runServer :: Port -> IO ()
 runServer p = run p $ serve lambdaApi lambdaServer
-

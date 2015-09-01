@@ -12,6 +12,11 @@ data Term = Var String
           | App (Term, Term)
   deriving (Show, Read, Eq, Ord, Generic)
 
+pretty :: Term -> String
+pretty (Var x) = x
+pretty (Lambda x t) = "\\" ++ x ++ " -> " ++ pretty t
+pretty (App (x,t)) = "(" ++ pretty x ++ ") " ++ pretty t
+
 instance ToJSON Term
 instance FromJSON Term
 
@@ -20,6 +25,6 @@ type Env = Map.Map String Term
 
 eval :: Env -> Term -> Term
 eval env (App (Lambda s t, t2)) = let t2' = eval env t2 in eval (Map.insert s t2' env) t
-eval _ (App (_, _)) = error "applying to non-lambda"
+eval _ (App (x, _)) = error $ "applying to non-lambda:" ++ pretty x
 eval env (Var x) = fromJust $ Map.lookup x env
 eval _ (Lambda s t) = Lambda s t
