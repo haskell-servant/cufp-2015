@@ -25,6 +25,8 @@ type Env = Map.Map String Term
 
 eval :: Env -> Term -> Term
 eval env (App (Lambda s t, t2)) = let t2' = eval env t2 in eval (Map.insert s t2' env) t
-eval _ (App (x, _)) = error $ "applying to non-lambda:" ++ pretty x
+eval env (App (x, t)) = case eval env x of
+    l@(Lambda _ _) -> eval env (App (l, t))
+    _ -> error $ pretty x
 eval env (Var x) = fromJust $ Map.lookup x env
 eval _ (Lambda s t) = Lambda s t
