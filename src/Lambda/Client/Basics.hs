@@ -22,13 +22,13 @@ try action = do
 -- * api functions
 
 var :: String -> M Term
-lambdaC :: String -> Term -> M Term
+lambda :: String -> Term -> M Term
 app :: (Term, Term) -> M Term
-eval :: _
-var :<|> lambdaC :<|> app :<|> eval = client lambdaApi url
+eval :: Term -> M Term
+var :<|> lambda :<|> app :<|> eval = client lambdaApi url
 
-lambda :: String -> M Term -> M Term
-lambda p b = lambdaC p =<< b
+lam :: String -> M Term -> M Term
+lam p b = lambda p =<< b
 
 (#) :: M Term -> M Term -> M Term
 f # a = do
@@ -37,7 +37,7 @@ f # a = do
   app (ft, at)
 
 identity :: M Term
-identity = lambda "x" (var "x")
+identity = lam "x" (var "x")
 
 main :: IO ()
 main = do

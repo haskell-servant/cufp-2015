@@ -16,11 +16,11 @@ main = do
   print $ toNat e
 
 zero :: M Term
-zero = lambda "s" (lambda "z" (var "z"))
+zero = lam "s" (lam "z" (var "z"))
 
 nat :: Integer -> M Term
 nat n =
-  lambda "s" (lambda "z" (inner n))
+  lam "s" (lam "z" (inner n))
   where
     inner 0 = var "z"
     inner x | x > 0 = var "s" # inner (pred x)
@@ -28,5 +28,5 @@ nat n =
 
 -- \ a -> \ b -> \ s -> \ z -> (a s) (b s z)
 add :: M Term
-add = lambda "a" (lambda "b" (lambda "s" (lambda "z"
+add = lam "a" (lam "b" (lam "s" (lam "z"
   ((var "a" # var "s") # ((var "b" # var "s") # var "z")))))
