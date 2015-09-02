@@ -15,6 +15,7 @@ library
     , base
     , bytestring
     , either
+    , getopt-generics
     , http-media
     , logging-facade
     , servant
