@@ -24,122 +24,13 @@ library
     , wai
     , warp
   exposed-modules:
-      CufpApi
-      MarkdownCT
       ChatApi
-      ChatApp
-  default-language: Haskell2010
-
-executable reference-node
-  main-is: reference-node.hs
-  hs-source-dirs:
-      drivers
-    , src
-  build-depends:
-      base
-    , servant
-    , servant-docs
-    , either
-    , transformers
-    , http-media
-    , bytestring
-    , aeson
-    , servant-server
-    , servant-client
-    , wai
-    , warp
-    , containers
-    , warp
-    , either
-    , transformers
-    , logging-facade
-  other-modules:
-      ChatApi
-      ChatApp
-      CufpApi
       Lambda.Api
+  other-modules:
+      ChatApp
       Lambda.Client.Basics
       Lambda.Client.Nats
       Lambda.Logic
       Lambda.Server
       MarkdownCT
-      ReferenceNode
-  default-language: Haskell2010
-
-executable example-client
-  main-is: example-client.hs
-  hs-source-dirs:
-      drivers
-    , src
-  build-depends:
-      base
-    , servant
-    , servant-docs
-    , either
-    , transformers
-    , http-media
-    , bytestring
-    , aeson
-    , servant-server
-    , servant-client
-    , wai
-    , warp
-    , either
-    , servant-client
-    , getopt-generics
-  other-modules:
-      ChatApi
-      ChatApp
-      CufpApi
-      Lambda.Api
-      Lambda.Client.Basics
-      Lambda.Client.Nats
-      Lambda.Logic
-      Lambda.Server
-      MarkdownCT
-      ReferenceNode
-  default-language: Haskell2010
-
-test-suite spec
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  hs-source-dirs:
-      test
-    , drivers
-    , src
-  build-depends:
-      base
-    , servant
-    , servant-docs
-    , either
-    , transformers
-    , http-media
-    , bytestring
-    , aeson
-    , servant-server
-    , servant-client
-    , wai
-    , warp
-    , hspec
-    , hspec-wai
-    , hspec-wai-json
-    , string-conversions
-    , wai-extra
-    , warp
-    , containers
-    , either
-    , transformers
-    , logging-facade
-  other-modules:
-      ReferenceNodeSpec
-      ChatApi
-      ChatApp
-      CufpApi
-      Lambda.Api
-      Lambda.Client.Basics
-      Lambda.Client.Nats
-      Lambda.Logic
-      Lambda.Server
-      MarkdownCT
-      ReferenceNode
   default-language: Haskell2010
