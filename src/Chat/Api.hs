@@ -40,8 +40,12 @@ instance ToSample Int Int where
 instance ToSample [(Person, Message)] [(Person, Message)] where
     toSample _ = Just [(Person "julian", Message "hi")]
 
+instance ToSample ([(Person, Message)], Int) ([(Person, Message)], Int) where
+    toSample _ = Just ([(Person "julian", Message "hi")], 1)
+
 instance ToCapture (Capture "person" Person) where
     toCapture _ = DocCapture "person" "the person's name"
+
 
 chatApi :: Proxy ChatApi
 chatApi = Proxy
