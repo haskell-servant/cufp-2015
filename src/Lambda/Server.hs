@@ -9,6 +9,7 @@ module Lambda.Server where
 
 import           Control.Monad.Trans.Either
 import           Network.Wai.Handler.Warp
+import           Network.Wai.Middleware.RequestLogger
 import           Servant
 import           Servant.Docs
 import           System.Logging.Facade as Log
@@ -62,4 +63,4 @@ runServer p = do
         setBeforeMainLoop
           (Log.info ("listening on port " ++ show p)) $
         defaultSettings
-  runSettings settings $ serve lambdaApi lambdaServer
+  runSettings settings $ logStdoutDev $ serve lambdaApi lambdaServer
