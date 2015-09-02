@@ -1,0 +1,15 @@
+dependencies:
+  - base
+  - bytestring
+  - either
+  - http-media
+  - JuicyPixels
+  - servant
+  - servant-client
+  - servant-docs
+  - servant-JuicyPixels
+  - servant-server
+  - transformers
+  - wai
+  - warp
+  - warp
