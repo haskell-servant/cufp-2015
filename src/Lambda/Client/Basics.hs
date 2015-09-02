@@ -19,7 +19,7 @@ var :: String -> M Term
 lambda :: String -> Term -> M Term
 app :: (Term, Term) -> M Term
 eval :: Term -> M Term
-_ :<|> var :<|> lambda :<|> app :<|> eval = client lambdaApi url
+_ :<|> var :<|> lambda :<|> app :<|> eval :<|> pretty = client lambdaApi url
 
 lam :: String -> M Term -> M Term
 lam p b = lambda p =<< b
@@ -42,6 +42,7 @@ infinite =
 main :: IO ()
 main = eitherT (error . show) return $ do
   c <- (identity # identity)
-  liftIO $ putStrLn $ pretty c
+  -- liftIO $ putStrLn $ pretty c
   r <- eval c
-  liftIO $ putStrLn $ pretty r
+  return ()
+  -- liftIO $ putStrLn $ pretty r

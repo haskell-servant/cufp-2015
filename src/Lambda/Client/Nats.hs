@@ -3,17 +3,19 @@ module Lambda.Client.Nats where
 
 import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
+import           Data.String.Conversions
 
 import           Lambda.Api
 import           Lambda.Client.Basics hiding (main)
 
 main :: IO ()
 main = eitherT (error . show) return $ do
-    result <- (add # nat 3) # nat 4
-    liftIO $ putStrLn $ pretty result
-    e <- eval result
-    liftIO . putStrLn $ pretty e
-    liftIO . print $ toNat e
+    input <- (add # nat 3) # nat 4
+    inputPretty <- pretty input
+    liftIO $ putStrLn $ cs inputPretty
+    output <- eval input
+    outputPretty <- pretty output
+    liftIO $ putStrLn $ cs outputPretty
 
 zero :: M Term
 zero = lam "s" (lam "z" (var "z"))

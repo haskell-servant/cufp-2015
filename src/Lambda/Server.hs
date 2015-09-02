@@ -8,6 +8,7 @@
 module Lambda.Server where
 
 import           Control.Monad.Trans.Either
+import           Data.String.Conversions
 import           Network.Wai.Handler.Warp
 import           Network.Wai.Middleware.RequestLogger
 import           Servant
@@ -25,6 +26,7 @@ lambdaServer =
   :<|> lambda
   :<|> app
   :<|> eval'
+  :<|> return . cs . pretty
 
 var :: Monad m => String -> m Term
 var = return . Var
@@ -49,6 +51,9 @@ instance (ToSample a a, ToSample b b) => ToSample (a, b) (a, b) where
 
 instance ToSample Term Term where
   toSample Proxy = Just (Lambda "x" (Var "x"))
+
+instance ToSample ST ST where
+  toSample Proxy = fmap (cs . pretty) $ toSample (Proxy :: Proxy Term)
 
 instance ToCapture (Capture "parameter" String) where
   toCapture Proxy = DocCapture "parameter" "name of the parameter of the lambda abstraction"
