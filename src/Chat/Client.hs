@@ -15,7 +15,7 @@ _ :<|> postMessage :<|> getMessages =
   client chatApi (BaseUrl Http "jkarni.com" 8087)
 
 second :: Int
-second = 100000
+second = 1000000
 
 keepGettingMessages :: IO ()
 keepGettingMessages = go 0
