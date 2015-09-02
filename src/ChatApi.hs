@@ -13,7 +13,7 @@ import           MarkdownCT
 import           Servant
 import           Servant.Docs
 
-newtype Person = Person { unPerson :: Int }
+newtype Person = Person { name :: String }
     deriving (Eq, Show, Generic, FromText, ToText)
 
 data Message = SimpleMessage String
@@ -33,7 +33,7 @@ instance ToSample Message Message where
     toSample _ = Just $ SimpleMessage "hi, this is a message"
 
 instance ToCapture (Capture "person" Person) where
-    toCapture _ = DocCapture "person" "the person's id"
+    toCapture _ = DocCapture "person" "the person's name"
 
 chatApi :: Proxy ChatApi
 chatApi = Proxy
