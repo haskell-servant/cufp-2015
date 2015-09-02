@@ -43,9 +43,6 @@ postMessage :: MVar [(Person, Message)] -> Person -> Message -> EitherT ServantE
 postMessage mvar p msg = liftIO $ modifyMVar_ mvar $ \ messages ->
   return (messages ++ [(p, msg)])
 
-dataDir :: FilePath
-dataDir = "chat/"
-
 getMessages :: MVar [(Person, Message)] -> Maybe Int -> EitherT ServantErr IO ([(Person, Message)], Int)
 getMessages mvar (fromMaybe 0 -> offset) = do
   messages <- liftIO $ readMVar mvar
