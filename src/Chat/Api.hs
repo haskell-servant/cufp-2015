@@ -8,6 +8,7 @@
 module Chat.Api where
 
 import           Data.Aeson
+import           Data.String
 import           GHC.Generics
 import           MarkdownCT
 import           Servant
@@ -16,14 +17,8 @@ import           Servant.Docs
 newtype Person = Person { name :: String }
     deriving (Eq, Show, Generic, FromText, ToText)
 
-data Message = SimpleMessage String
-    deriving (Eq, Show, Generic)
-
-instance ToJSON Message where
-    toJSON (SimpleMessage m) = toJSON m
-
-instance FromJSON Message where
-    parseJSON x = SimpleMessage <$> parseJSON x
+newtype Message = Message { unMessage :: String }
+    deriving (Eq, Show, Generic, IsString, ToJSON, FromJSON)
 
 type ChatApi =
        "docs" :> Get '[Markdown] Markdown
@@ -31,7 +26,7 @@ type ChatApi =
   :<|> "massages" :> QueryParam "offset" Int :> Get '[JSON] ([Message], Int)
 
 instance ToSample Message Message where
-    toSample _ = Just $ SimpleMessage "hi, this is a message"
+    toSample _ = Just $ Message "hi, this is a message"
 
 instance ToCapture (Capture "person" Person) where
     toCapture _ = DocCapture "person" "the person's name"

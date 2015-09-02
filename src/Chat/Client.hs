@@ -12,7 +12,7 @@ import           Chat.Api
 postMessage :: Person -> Message -> EitherT ServantError IO ()
 getMessages :: Maybe Int -> EitherT ServantError IO ([Message], Int)
 _ :<|> postMessage :<|> getMessages =
-  client chatApi (BaseUrl Http "localhost" 8087)
+  client chatApi (BaseUrl Http "jkarni.com" 8087)
 
 second :: Int
 second = 100000
@@ -29,7 +29,7 @@ keepGettingMessages = go 0
 main :: Person -> IO ()
 main p = forkIO keepGettingMessages >> forever (do
     msg <- getLine
-    r <- runEitherT $ postMessage p (SimpleMessage msg)
+    r <- runEitherT $ postMessage p (Message msg)
     case r of
         Left e   -> putStrLn $ "error: " ++ show e
         Right () -> return ())
