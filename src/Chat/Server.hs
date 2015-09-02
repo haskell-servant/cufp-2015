@@ -5,8 +5,6 @@
 {-# LANGUAGE TupleSections #-}
 {-# LANGUAGE ViewPatterns #-}
 
-{-# OPTIONS_GHC -fno-warn-orphans #-}
-
 module Chat.Server where
 
 import           Control.Concurrent
@@ -26,18 +24,6 @@ chatApp mvar = apiDocs :<|> postMessage mvar :<|> getMessages mvar
 
 apiDocs :: EitherT ServantErr IO Markdown
 apiDocs = return . Markdown . markdown $ docs chatApi
-
-instance ToParam (QueryParam "answerPort" Int) where
-  toParam Proxy = DocQueryParam "answerPort" ["8080", "9000"]
-    "port where the sender hosts their own chat server" Normal
-
-
-instance ToParam (QueryParam "offset" Int) where
-  toParam Proxy = DocQueryParam
-    "offset"
-    ["0", "25", "-10"]
-    "offset from beginning (positive) or from end (negative)"
-    Normal
 
 postMessage :: MVar [(Person, Message)] -> Person -> Message -> EitherT ServantErr IO ()
 postMessage mvar p msg = liftIO $ modifyMVar_ mvar $ \ messages ->

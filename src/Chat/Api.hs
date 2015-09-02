@@ -27,6 +27,9 @@ type ChatApi =
   :<|> "message" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
   :<|> "massages" :> QueryParam "offset" Int :> Get '[JSON] ([(Person, Message)], Int)
 
+chatApi :: Proxy ChatApi
+chatApi = Proxy
+
 instance ToSample Message Message where
     toSample _ = Just $ Message "hi, this is a message"
 
@@ -47,6 +50,13 @@ instance ToSample ([(Person, Message)], Int) ([(Person, Message)], Int) where
 instance ToCapture (Capture "person" Person) where
     toCapture _ = DocCapture "person" "the person's name"
 
+instance ToParam (QueryParam "answerPort" Int) where
+  toParam Proxy = DocQueryParam "answerPort" ["8080", "9000"]
+    "port where the sender hosts their own chat server" Normal
 
-chatApi :: Proxy ChatApi
-chatApi = Proxy
+instance ToParam (QueryParam "offset" Int) where
+  toParam Proxy = DocQueryParam
+    "offset"
+    ["0", "25", "-10"]
+    "offset from beginning (positive) or from end (negative)"
+    Normal
