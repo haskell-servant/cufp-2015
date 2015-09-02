@@ -2,6 +2,10 @@
 
 # chat api
 
+- ask for simple receiving servers
+- ask for (backwards-compatible) amendment to the api
+  for being able to send the `answerPort`.
+
 # lambda api
 
 - give Term datatype (+ FromJSON, ToJSON) and api type
