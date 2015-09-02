@@ -25,10 +25,6 @@ apiDocs = return . Markdown . markdown $ docs chatApi
 postMessage :: Person -> Message -> EitherT ServantErr IO ()
 postMessage p (SimpleMessage msg) = liftIO $ appendFile (dataDir <> personFile p) msg
 
--- Like appendFile, but creates file if missing.
-appendFile' :: FilePath -> String -> IO ()
-appendFile' fp msg = openFile fp AppendMode >>= \h -> hPutStr h msg
-
 dataDir :: FilePath
 dataDir = "chat/"
 
