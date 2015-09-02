@@ -27,7 +27,7 @@ instance FromJSON Message where
 
 type ChatApi =
        "docs" :> Get '[Markdown] Markdown
-  :<|> "from" :> Capture "person" Person :> QueryParam "answerPort" Int :> ReqBody '[JSON] Message :> Post '[JSON] ()
+  :<|> "from" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
 
 instance ToSample Message Message where
     toSample _ = Just $ SimpleMessage "hi, this is a message"
