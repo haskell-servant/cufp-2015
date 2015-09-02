@@ -11,16 +11,17 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base
-    , servant
-    , servant-docs
-    , either
-    , transformers
-    , http-media
+      aeson
+    , base
     , bytestring
-    , aeson
-    , servant-server
+    , either
+    , http-media
+    , logging-facade
+    , servant
     , servant-client
+    , servant-docs
+    , servant-server
+    , transformers
     , wai
     , warp
   exposed-modules:

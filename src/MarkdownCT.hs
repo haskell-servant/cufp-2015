@@ -1,5 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
+
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 -- | This file defines a new content-type for markdown.
 module MarkdownCT where
 

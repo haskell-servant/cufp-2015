@@ -25,6 +25,8 @@ type LambdaApi =
 lambdaApi :: Proxy LambdaApi
 lambdaApi = Proxy
 
+type Docs = "docs" :> Get '[Markdown] Markdown
+
 type Var = "var" :> Capture "var" String :> Get '[JSON] Term
 
 type Lambda = "lambda" :> Capture "parameter" String :> ReqBody '[JSON] Term :> Get '[JSON] Term
@@ -32,5 +34,3 @@ type Lambda = "lambda" :> Capture "parameter" String :> ReqBody '[JSON] Term :> 
 type App = "app" :> ReqBody '[JSON] (Term, Term) :> Get '[JSON] Term
 
 type Eval = "eval" :> ReqBody '[JSON] Term :> Get '[JSON] Term
-
-type Docs = "docs" :> Get '[Markdown] Markdown

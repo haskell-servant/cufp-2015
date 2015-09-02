@@ -1,20 +1,20 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 module ChatApp where
 
-import Data.Monoid
-import ChatApi
-import Servant
-import Servant.Client
-import Servant.Docs
-import System.IO
-import MarkdownCT
-import Network.Wai.Handler.Warp
-import Control.Monad.IO.Class (liftIO)
-import Control.Monad.Trans.Either
+import           ChatApi
+import           Control.Monad.IO.Class (liftIO)
+import           Control.Monad.Trans.Either
+import           Data.Monoid
+import           MarkdownCT
+import           Network.Wai.Handler.Warp
+import           Servant
+import           Servant.Client
+import           Servant.Docs
 
 chatApp :: Server ChatApi
-chatApp = postMessage :<|> apiDocs
+chatApp = apiDocs :<|> postMessage
 
 personFile :: Person -> FilePath
 personFile (Person p) = show p <> ".chat"
@@ -29,10 +29,10 @@ dataDir :: FilePath
 dataDir = "chat/"
 
 postMessage' :: Person -> Message -> EitherT ServantError IO ()
-postMessage' :<|> _ = client chatApi (BaseUrl Http "localhost" 8087)
+_ :<|> postMessage' = client chatApi (BaseUrl Http "localhost" 8087)
 
 postMessage82 :: Person -> Message -> EitherT ServantError IO ()
-postMessage82 :<|> _ = client chatApi (BaseUrl Http "jkarni.com" 8082)
+_ :<|> postMessage82 = client chatApi (BaseUrl Http "jkarni.com" 8082)
 
 main :: IO ()
 main = do

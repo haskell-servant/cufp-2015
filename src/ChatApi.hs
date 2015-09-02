@@ -1,17 +1,17 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE DataKinds #-}
-{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeOperators #-}
+
 module ChatApi where
 
-import Servant
-import Servant.Docs
-import Data.Aeson
-import Data.Proxy
-import GHC.Generics
-import MarkdownCT
+import           Data.Aeson
+import           GHC.Generics
+import           MarkdownCT
+import           Servant
+import           Servant.Docs
 
 newtype Person = Person { unPerson :: Int }
     deriving (Eq, Show, Generic, FromText, ToText)
@@ -25,9 +25,9 @@ instance ToJSON Message where
 instance FromJSON Message where
     parseJSON x = SimpleMessage <$> parseJSON x
 
-type ChatApi
-  = "from" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
-  :<|> "docs" :> Get '[Markdown] Markdown
+type ChatApi =
+       "docs" :> Get '[Markdown] Markdown
+  :<|> "from" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
 
 instance ToSample Message Message where
     toSample _ = Just $ SimpleMessage "hi, this is a message"

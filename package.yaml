@@ -1,16 +1,17 @@
 name: cufp-api
 
 dependencies:
-    - base
-    - servant
-    - servant-docs
-    - either
-    - transformers
-    - http-media
-    - bytestring
     - aeson
-    - servant-server
+    - base
+    - bytestring
+    - either
+    - http-media
+    - logging-facade
+    - servant
     - servant-client
+    - servant-docs
+    - servant-server
+    - transformers
     - wai
     - warp
 
