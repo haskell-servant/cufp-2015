@@ -11,6 +11,7 @@ import           Control.Monad.Trans.Either
 import           Network.Wai.Handler.Warp
 import           Servant
 import           Servant.Docs
+import           System.Logging.Facade as Log
 
 import           Lambda.Api
 import           Lambda.Logic
@@ -55,4 +56,10 @@ instance ToCapture (Capture "var" String) where
   toCapture Proxy = DocCapture "var" "variable name"
 
 runServer :: Port -> IO ()
-runServer p = run p $ serve lambdaApi lambdaServer
+runServer p = do
+  let settings =
+        setPort p $
+        setBeforeMainLoop
+          (Log.info ("listening on port " ++ show p)) $
+        defaultSettings
+  runSettings settings $ serve lambdaApi lambdaServer
