@@ -1,11 +1,13 @@
 
 module Chat.Client where
 
-import Control.Monad
+import           Control.Concurrent
+import           Control.Monad
 import           Control.Monad.Trans.Either
 import           Servant.API
-import           Control.Concurrent
 import           Servant.Client
+import           System.Console.GetOpt.Generics
+import qualified System.Logging.Facade as Log
 
 import           Chat.Api
 
@@ -22,14 +24,17 @@ keepGettingMessages = go 0
   where
     go n = runEitherT (getMessages $ Just n) >>= \c -> case c of
       Left err -> print err >> threadDelay second >> go n
-      Right (msg, len) -> do
-        when (length msg > 0) $ print msg
+      Right (msgs, len) -> do
+        forM_ msgs $ \(Message msg) -> do
+          putStrLn msg
         threadDelay second >> go len
 
-main :: Person -> IO ()
-main p = forkIO keepGettingMessages >> forever (do
+main :: IO ()
+main = simpleCLI $ \ n -> do
+  _ <- forkIO keepGettingMessages >> forever (do
     msg <- getLine
-    r <- runEitherT $ postMessage p (Message msg)
+    r <- runEitherT $ postMessage (Person n) (Message msg)
     case r of
-        Left e   -> putStrLn $ "error: " ++ show e
-        Right () -> return ())
+      Left e   -> Log.error $ "error: " ++ show e
+      Right () -> return ())
+  return ()
