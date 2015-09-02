@@ -33,9 +33,15 @@ f # a = do
 identity :: M Term
 identity = lam "x" (var "x")
 
+-- (\ x -> x x) (\ x -> x x)
+infinite :: M Term
+infinite =
+  let t = lam "x" (var "x" # var "x")
+  in t # t
+
 main :: IO ()
 main = eitherT (error . show) return $ do
   c <- (identity # identity)
-  liftIO $ print c
+  liftIO $ putStrLn $ pretty c
   r <- eval c
-  liftIO $ print r
+  liftIO $ putStrLn $ pretty r
