@@ -19,7 +19,7 @@ var :: String -> M Term
 lambda :: String -> Term -> M Term
 app :: (Term, Term) -> M Term
 eval :: Term -> M Term
-var :<|> lambda :<|> app :<|> eval :<|> _ = client lambdaApi url
+_ :<|> var :<|> lambda :<|> app :<|> eval = client lambdaApi url
 
 lam :: String -> M Term -> M Term
 lam p b = lambda p =<< b

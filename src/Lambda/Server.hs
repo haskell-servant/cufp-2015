@@ -3,6 +3,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 module Lambda.Server where
 
 import           Control.Monad.Trans.Either
@@ -15,11 +17,12 @@ import           Lambda.Logic
 import           MarkdownCT
 
 lambdaServer :: Server LambdaApi
-lambdaServer = var
-          :<|> lambda
-          :<|> app
-          :<|> eval'
-          :<|> apiDocs
+lambdaServer =
+       apiDocs
+  :<|> var
+  :<|> lambda
+  :<|> app
+  :<|> eval'
 
 var :: Monad m => String -> m Term
 var = return . Var

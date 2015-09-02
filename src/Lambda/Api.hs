@@ -15,11 +15,12 @@ import           Lambda.Logic
 import           MarkdownCT
 
 type LambdaApi =
-       Var
+       Docs
+
+  :<|> Var
   :<|> Lambda
   :<|> App
   :<|> Eval
-  :<|> Docs
 
 lambdaApi :: Proxy LambdaApi
 lambdaApi = Proxy
