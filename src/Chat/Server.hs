@@ -31,10 +31,6 @@ instance ToParam (QueryParam "answerPort" Int) where
   toParam Proxy = DocQueryParam "answerPort" ["8080", "9000"]
     "port where the sender hosts their own chat server" Normal
 
-instance ToSample ([Message], Int) ([Message], Int) where
-  toSample Proxy = Just (messages, length messages)
-    where
-      messages = map snd $ toSamples (Proxy :: Proxy Message)
 
 instance ToParam (QueryParam "offset" Int) where
   toParam Proxy = DocQueryParam
@@ -50,10 +46,10 @@ postMessage mvar p msg = liftIO $ modifyMVar_ mvar $ \ messages ->
 dataDir :: FilePath
 dataDir = "chat/"
 
-getMessages :: MVar [(Person, Message)] -> Maybe Int -> EitherT ServantErr IO ([Message], Int)
+getMessages :: MVar [(Person, Message)] -> Maybe Int -> EitherT ServantErr IO ([(Person, Message)], Int)
 getMessages mvar (fromMaybe 0 -> offset) = do
   messages <- liftIO $ readMVar mvar
-  return $ (, length messages) $ map snd $ if offset >= 0
+  return $ (, length messages) $ if offset >= 0
     then drop offset messages
     else reverse $ take (negate offset) $ reverse messages
 
