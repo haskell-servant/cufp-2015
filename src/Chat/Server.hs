@@ -21,7 +21,7 @@ import qualified System.Logging.Facade as Log
 
 import           Chat.Api
 
-chatApp :: MVar [Message] -> Server ChatApi
+chatApp :: MVar [(Person, Message)] -> Server ChatApi
 chatApp mvar = apiDocs :<|> postMessage mvar :<|> getMessages mvar
 
 apiDocs :: EitherT ServantErr IO Markdown
@@ -43,17 +43,17 @@ instance ToParam (QueryParam "offset" Int) where
     "offset from beginning (positive) or from end (negative)"
     Normal
 
-postMessage :: MVar [Message] -> Person -> Message -> EitherT ServantErr IO ()
-postMessage mvar _p msg = liftIO $ modifyMVar_ mvar $ \ messages ->
-  return (messages ++ [msg])
+postMessage :: MVar [(Person, Message)] -> Person -> Message -> EitherT ServantErr IO ()
+postMessage mvar p msg = liftIO $ modifyMVar_ mvar $ \ messages ->
+  return (messages ++ [(p, msg)])
 
 dataDir :: FilePath
 dataDir = "chat/"
 
-getMessages :: MVar [Message] -> Maybe Int -> EitherT ServantErr IO ([Message], Int)
+getMessages :: MVar [(Person, Message)] -> Maybe Int -> EitherT ServantErr IO ([Message], Int)
 getMessages mvar (fromMaybe 0 -> offset) = do
   messages <- liftIO $ readMVar mvar
-  return $ (, length messages) $ if offset >= 0
+  return $ (, length messages) $ map snd $ if offset >= 0
     then drop offset messages
     else reverse $ take (negate offset) $ reverse messages
 
