@@ -12,7 +12,7 @@ import qualified System.Logging.Facade as Log
 import           Chat.Api
 
 postMessage :: Person -> Message -> EitherT ServantError IO ()
-getMessages :: Maybe Int -> EitherT ServantError IO ([Message], Int)
+getMessages :: Maybe Int -> EitherT ServantError IO ([(Person, Message)], Int)
 _ :<|> postMessage :<|> getMessages =
   client chatApi (BaseUrl Http "jkarni.com" 8087)
 
@@ -25,8 +25,8 @@ keepGettingMessages = go 0
     go n = runEitherT (getMessages $ Just n) >>= \c -> case c of
       Left err -> print err >> threadDelay second >> go n
       Right (msgs, len) -> do
-        forM_ msgs $ \(Message msg) -> do
-          putStrLn msg
+        forM_ msgs $ \(Person sender, Message msg) -> do
+          putStrLn (sender ++ " > " ++ msg)
         threadDelay second >> go len
 
 main :: IO ()
