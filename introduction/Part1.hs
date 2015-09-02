@@ -214,12 +214,14 @@ allPersons = [alice, bob]
 
 -- Here's our API:
 
-type Example =
-       "persons" :> Get '[JSON] [Person]
-  :<|> "person" :> Capture "name" String :> Get '[JSON] Person
-  :<|> "persons" :> "search" :> QueryParam "q" String :> Get '[JSON] [Person]
+type ExampleApi =
+  "person" :> (
+         Get '[JSON] [Person]
+    :<|> "get" :> Capture "name" String :> Get '[JSON] Person
+    :<|> "search" :> QueryParam "q" String :> Get '[JSON] [Person]
+  )
 
-exampleProxy :: Proxy Example
+exampleProxy :: Proxy ExampleApi
 exampleProxy = Proxy
 
 -- Our server implementation:
@@ -227,9 +229,9 @@ exampleProxy = Proxy
 exampleRun :: IO ()
 exampleRun = Warp.run 8080 (serve exampleProxy exampleServer)
 
-exampleServer :: Server Example
+exampleServer :: Server ExampleApi
 exampleServer =
-       (return allPersons)
+       return allPersons
   :<|> getPerson
   :<|> searchPerson
 
