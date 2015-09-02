@@ -5,7 +5,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeOperators #-}
 
-module ChatApi where
+module Chat.Api where
 
 import           Data.Aeson
 import           GHC.Generics
@@ -27,7 +27,8 @@ instance FromJSON Message where
 
 type ChatApi =
        "docs" :> Get '[Markdown] Markdown
-  :<|> "from" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
+  :<|> "message" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
+  :<|> "massages" :> QueryParam "offset" Int :> Get '[JSON] ([Message], Int)
 
 instance ToSample Message Message where
     toSample _ = Just $ SimpleMessage "hi, this is a message"

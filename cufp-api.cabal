@@ -28,10 +28,10 @@ library
     , wai-extra
     , warp
   exposed-modules:
-      ChatApi
+      Chat.Api
+      Chat.Client
+      Chat.Server
       Lambda.Api
-  other-modules:
-      ChatApp
       Lambda.Client.Basics
       Lambda.Client.Nats
       Lambda.Logic
