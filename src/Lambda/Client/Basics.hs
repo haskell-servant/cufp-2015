@@ -3,6 +3,8 @@ module Lambda.Client.Basics where
 
 import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
+import           Data.String.Conversions
+import           Data.Text
 import           Servant.API
 import           Servant.Client
 
@@ -19,6 +21,7 @@ var :: String -> M Term
 lambda :: String -> Term -> M Term
 app :: (Term, Term) -> M Term
 eval :: Term -> M Term
+pretty :: Term -> M Text
 _ :<|> var :<|> lambda :<|> app :<|> eval :<|> pretty = client lambdaApi url
 
 lam :: String -> M Term -> M Term
@@ -42,7 +45,6 @@ infinite =
 main :: IO ()
 main = eitherT (error . show) return $ do
   c <- (identity # identity)
-  -- liftIO $ putStrLn $ pretty c
+  liftIO . putStrLn . cs =<< pretty c
   r <- eval c
-  return ()
-  -- liftIO $ putStrLn $ pretty r
+  liftIO . putStrLn . cs =<< pretty r

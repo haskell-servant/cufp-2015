@@ -11,8 +11,11 @@ dependencies:
     - servant-client
     - servant-docs
     - servant-server
+    - string-conversions
+    - text
     - transformers
     - wai
+    - wai-extra
     - warp
 
 library:
