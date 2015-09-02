@@ -274,18 +274,4 @@ type MainApi =
 type PublicApi = Get '[JSON] ()
 type AdminApi = Get '[JSON] ()
 
-
-
--- todo (julian):
--- - content-types
--- - other interpretations
---   - client
---   - docs
---   - others?
--- - something else?
-
-
 -- # Coding
-
--- Everything is fair game, e.g. invalid requests or responses are not
--- considered playing dirty.
