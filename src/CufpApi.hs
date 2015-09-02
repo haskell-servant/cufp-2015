@@ -56,8 +56,3 @@ instance ToSample [Node] [Node] where
                       , Node { host = "remote.com", port = 80 }
                       ]
 
-instance ToSample () () where
-    toSample _ = Just ()
-
-instance ToSample Markdown Markdown where
-    toSample _ = Just $ Markdown "# Sample markdown\n Lorem *ipsum*"

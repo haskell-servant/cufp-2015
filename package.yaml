@@ -4,11 +4,15 @@ dependencies:
     - base
     - servant
     - servant-docs
+    - either
+    - transformers
     - http-media
     - bytestring
     - aeson
     - servant-server
+    - servant-client
     - wai
+    - warp
 
 library:
   source-dirs:
@@ -16,6 +20,8 @@ library:
   exposed-modules:
     - CufpApi
     - MarkdownCT
+    - ChatApi
+    - ChatApp
   other-modules: []
 
 executables:
