@@ -35,6 +35,5 @@ library
       Lambda.Client.Basics
       Lambda.Client.Nats
       Lambda.Logic
-      Lambda.Server
       MarkdownCT
   default-language: Haskell2010

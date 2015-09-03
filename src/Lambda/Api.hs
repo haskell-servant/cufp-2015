@@ -13,7 +13,6 @@ module Lambda.Api (
  ) where
 
 import           Data.Proxy
-import           Data.String.Conversions
 import           Servant.API
 import           Servant.Docs
 
@@ -48,9 +47,6 @@ instance (ToSample a a, ToSample b b) => ToSample (a, b) (a, b) where
 
 instance ToSample Term Term where
   toSample Proxy = Just (Lambda "x" (Var "x"))
-
-instance ToSample ST ST where
-  toSample Proxy = fmap (cs . pretty) $ toSample (Proxy :: Proxy Term)
 
 instance ToCapture (Capture "parameter" String) where
   toCapture Proxy = DocCapture "parameter" "name of the parameter of the lambda abstraction"

@@ -4,7 +4,6 @@ module Chat.Client where
 import           Control.Concurrent
 import           Control.Monad
 import           Control.Monad.Trans.Either
-import           Servant.API
 import           Servant.Client
 import           System.Console.GetOpt.Generics
 import qualified System.Logging.Facade as Log
