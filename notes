@@ -7,12 +7,11 @@
 # lambda api
 
 - give Term datatype (+ FromJSON, ToJSON) and api type
-- ask for `evaluate :: Term -> Term`
-- ask for server
+- ask for server, including `evaluate :: Term -> Term`
 - ask for simple client
 - ask for church encoding of naturals client side
 - show how to do addition
-- ask how to test two servers for equality
+- ask to test two servers for equality
 - show the number of requests
 - move client side naturals to the server and compare number of requests
 - share `pretty` between server and client

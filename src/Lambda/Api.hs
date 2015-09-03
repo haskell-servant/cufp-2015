@@ -14,7 +14,6 @@ module Lambda.Api (
 
 import           Data.Proxy
 import           Data.String.Conversions
-import           Data.Text
 import           Servant.API
 import           Servant.Docs
 
@@ -29,8 +28,6 @@ type LambdaApi =
   :<|> App
   :<|> Eval
 
-  :<|> Pretty
-
 lambdaApi :: Proxy LambdaApi
 lambdaApi = Proxy
 
@@ -43,8 +40,6 @@ type Lambda = "lambda" :> Capture "parameter" String :> ReqBody '[JSON] Term :> 
 type App = "app" :> ReqBody '[JSON] (Term, Term) :> Get '[JSON] Term
 
 type Eval = "eval" :> ReqBody '[JSON] Term :> Get '[JSON] Term
-
-type Pretty = "convenience" :> "pretty" :> ReqBody '[JSON] Term :> Get '[PlainText] Text 
 
 instance (ToSample a a, ToSample b b) => ToSample (a, b) (a, b) where
   toSample Proxy = (,) <$>

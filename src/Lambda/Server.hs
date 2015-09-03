@@ -6,7 +6,6 @@
 module Lambda.Server where
 
 import           Control.Monad.Trans.Either
-import           Data.String.Conversions
 import           Network.Wai.Handler.Warp
 import           Network.Wai.Middleware.RequestLogger
 import           Servant
@@ -24,7 +23,6 @@ lambdaServer =
   :<|> lambda
   :<|> app
   :<|> eval'
-  :<|> return . cs . pretty
 
 var :: Monad m => String -> m Term
 var = return . Var
