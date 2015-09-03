@@ -5,13 +5,13 @@ dependencies:
     - base
     - bytestring
     - either
-    - getopt-generics
+    - getopt-generics == 0.10.*
     - http-media
     - logging-facade
-    - servant
-    - servant-client
-    - servant-docs
-    - servant-server
+    - servant == 0.4.*
+    - servant-client == 0.4.*
+    - servant-docs == 0.4.*
+    - servant-server == 0.4.*
     - string-conversions
     - text
     - transformers
