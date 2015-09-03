@@ -23,14 +23,13 @@
 
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
 
 module Part1 where
 
-import           Control.Concurrent
-import           Control.Monad.IO.Class
 import           Control.Monad.Trans.Either
 import           Data.Aeson
 import           Data.List
@@ -199,9 +198,7 @@ data Person
     name :: String,
     age :: Int
   }
-  deriving (Show, Eq, Ord, Generic)
-
-instance ToJSON Person
+  deriving (Show, Eq, Ord, Generic, ToJSON)
 
 alice :: Person
 alice = Person "alice" 1
