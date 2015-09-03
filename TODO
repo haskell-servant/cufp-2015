@@ -1,5 +1,4 @@
 - prepare cheat sheets
-- move instances for docs into the API modules
 - prepare code to give them
 - make sure cabal file does the right thing
 - prepare steps for chat api

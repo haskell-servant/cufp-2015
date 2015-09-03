@@ -52,16 +52,19 @@ import           Servant.API.ContentTypes ()
 -- ## API DSL
 
 -- The central idea of servant is that APIs can
--- be expressed as types. Type synonyms to be exact:
+-- be expressed as types (combined from existing types).
 
 type SimpleGet = Get '[JSON] [Int]
 
 type SimplePost = Post '[JSON] String
 
+-- Note that so far these are just types that describe APIs
+-- There is no executable piece of code yet.
+
 
 -- There's two important infix operators (on the type level):
 
--- 1) The sequential operator, aka bird-face: :>
+-- 1) The sequential operator, called sub, aka bird-face: :>
 
 type SimplePath = "foo" :> Get '[JSON] [Int]
 
@@ -78,21 +81,21 @@ type Combined =
        "list" :> Get '[JSON] [Int]
   :<|> "list" :> "poke" :> Post '[JSON] String
 
--- Note that so far these are just types that describe APIs
--- There is no executable piece of code yet.
+-- Again, those are just types. But now that we have a
+-- high-level description of APIs (at the type level)
+-- we can interpret in multiple ways, e.g. for:
+-- - writing servers,
+-- - obtaining client functions,
+-- - generate documentation,
+-- - etc.
+
 
 -- ## Writing a Server to an API
 
--- `serve` let's us create wai `Application`s for all types that
--- have a `HasServer` instance.
+-- Servant allows you to map type-level APIs to types of web-handlers
+-- using type families.
 
 type Simple = Get '[JSON] [Int]
-
-simpleApp :: Application
-simpleApp = serve simpleProxy simpleServer
-
-simpleProxy :: Proxy Simple
-simpleProxy = Proxy
 
 simpleServer :: Server Simple
 simpleServer = error "nyi"
@@ -101,17 +104,34 @@ simpleServer = error "nyi"
 -- ...
 -- = EitherT ServantErr IO [Int]
 
+-- `serve` let's us create wai `Application`s for all types that
+-- have a `HasServer` instance.
+
+simpleApp :: Application
+simpleApp = serve simpleProxy simpleServer
+
+simpleProxy :: Proxy Simple
+simpleProxy = Proxy
+
 simpleRun :: IO ()
 simpleRun = Warp.run 8080 simpleApp
 
 
 -- We can change the type. We can e.g.
--- - add a path,
 -- - change the return type,
--- - add an endpoint.
+-- - add an endpoint,
+-- - add a path.
+
+-- This is one of the central ideas of Servant:
+-- - It allows to specify APIs at the type-level,
+-- - it offers -- in the case of the server
+--   interpretation -- a type family that computes the type of the
+--   server that the user has to implement in order to conform to
+--   the specified API.
 
 -- The typesystem will always make sure that our server always implements the
 -- specified API.
+
 
 -- # Further Combinators
 
@@ -122,15 +142,15 @@ data DemoReqBody a
 
 -- It's an uninhabited type. It can be used in API specifications.
 
-type SimpleBody = DemoReqBody :> Get '[PlainText] Text
+type SimpleBody = DemoReqBody Text :> Get '[PlainText] Text
 
 -- To be able to implement a `Server` for this API we need a `HasServer`
 -- instance. This instance -- together with its associated type (`ServerT`) --
 -- gives `DemoReqBody` its meaning. (This is also called an interpretation
 -- of the type level term.)
 
-instance HasServer api => HasServer (DemoReqBody :> api) where
-  type ServerT (DemoReqBody :> api) m = Text -> ServerT api m
+instance HasServer api => HasServer (DemoReqBody a :> api) where
+  type ServerT (DemoReqBody a :> api) m = a -> ServerT api m
   route = error "DemoReqBody.route: nyi"
 
 -- The `HasServer` instances of the different combinators of the API
