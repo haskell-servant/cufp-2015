@@ -147,14 +147,11 @@ type SimpleBody = DemoReqBody Text :> Get '[PlainText] Text
 -- To be able to implement a `Server` for this API we need a `HasServer`
 -- instance. This instance -- together with its associated type (`ServerT`) --
 -- gives `DemoReqBody` its meaning. (This is also called an interpretation
--- of the type level term.)
+-- of the type-level term.)
 
 instance HasServer api => HasServer (DemoReqBody a :> api) where
   type ServerT (DemoReqBody a :> api) m = a -> ServerT api m
   route = error "DemoReqBody.route: nyi"
-
--- The `HasServer` instances of the different combinators of the API
--- description pin down the type of the server implementation.
 
 -- $ >>> :kind! Server SimpleBody
 -- ...
@@ -265,21 +262,7 @@ searchPerson (Just query) = return $
 searchPerson Nothing = left $ err400
 
 
--- Some random thoughts:
-
--- Most combinators come with some class constraints for
--- serialization or deserialization. Try out:
-
--- :<|> "persons" :> "add" :> ReqBody '[JSON] Person :> Post '[JSON] ()
-
-
--- A handle to e.g. a database connection could easily be passed in as
--- arguments to the individual handlers (and the whole server).
--- Personally I like this approach very much because it's
--- - very simple and easy to understand and
--- - it's very explicit which handlers can perform which kinds of
---   side-effects.
-
+-- One last thought:
 
 -- Haskell's normal means of abstracting types can be used to structure API
 -- specifications:
