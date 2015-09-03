@@ -16,4 +16,3 @@ fi
 
 stack setup
 stack build --pedantic
-stack test --pedantic

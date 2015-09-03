@@ -9,6 +9,7 @@
 - give Term datatype (+ FromJSON, ToJSON) and api type
 - ask for server, including `evaluate :: Term -> Term`
 - ask for simple client
+- (ask for diverging terms?)
 - ask for church encoding of naturals client side
 - show how to do addition
 - ask to test two servers for equality

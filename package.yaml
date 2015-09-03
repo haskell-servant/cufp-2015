@@ -1,5 +1,8 @@
 name: cufp-api
 
+ghc-options:
+  "-Wall"
+
 dependencies:
     - aeson
     - base

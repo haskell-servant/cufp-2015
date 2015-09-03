@@ -14,4 +14,4 @@ instance ToJSON Term
 instance FromJSON Term
 
 evaluate :: Term -> Term
-evaluate = _
+evaluate = error "not yet implemented"

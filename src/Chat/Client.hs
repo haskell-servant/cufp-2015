@@ -11,10 +11,10 @@ import qualified System.Logging.Facade as Log
 import           Chat.Api
 
 postMessage :: Person -> Message -> EitherT ServantError IO ()
-postMessage = _
+postMessage = error "not yet implemented"
 
 getMessages :: Maybe Int -> EitherT ServantError IO ([(Person, Message)], Int)
-getMessages = _
+getMessages = error "not yet implemented"
 
 second :: Int
 second = 1000000
