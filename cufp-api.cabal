@@ -31,7 +31,6 @@ library
   exposed-modules:
       Chat.Api
       Chat.Client
-      Chat.Server
       Lambda.Api
       Lambda.Client.Basics
       Lambda.Client.Nats

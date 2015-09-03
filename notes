@@ -2,9 +2,7 @@
 
 # chat api
 
-- ask for simple receiving servers
-- ask for (backwards-compatible) amendment to the api
-  for being able to send the `answerPort`.
+- implement the server
 
 # lambda api
 
