@@ -1,4 +1,4 @@
--- This file has been generated from package.yaml by hpack version 0.5.4.
+-- This file has been generated from package.yaml by hpack version 0.1.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -8,9 +8,14 @@ build-type:     Simple
 cabal-version:  >= 1.10
 
 library
-  hs-source-dirs:
-      src
-  ghc-options: -Wall
+  hs-source-dirs: src
+  exposed-modules:
+      Chat.Api
+      Chat.Client
+      Lambda.Api
+      Lambda.Logic
+      Lambda.Server
+      MarkdownCT
   build-depends:
       aeson
     , base
@@ -29,10 +34,5 @@ library
     , wai
     , wai-extra
     , warp
-  exposed-modules:
-      Chat.Api
-      Chat.Client
-      Lambda.Api
-      Lambda.Logic
-      MarkdownCT
+  ghc-options: -Wall
   default-language: Haskell2010

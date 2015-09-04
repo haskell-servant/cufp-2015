@@ -1,3 +1,5 @@
+-- The description of the API, including the datatypes (and instances) that
+-- participate in that API.
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -39,6 +41,8 @@ type Lambda = "lambda" :> Capture "parameter" String :> ReqBody '[JSON] Term :> 
 type App = "app" :> ReqBody '[JSON] (Term, Term) :> Get '[JSON] Term
 
 type Eval = "eval" :> ReqBody '[JSON] Term :> Get '[JSON] Term
+
+-- * Instances for documentation.
 
 instance (ToSample a a, ToSample b b) => ToSample (a, b) (a, b) where
   toSample Proxy = (,) <$>
