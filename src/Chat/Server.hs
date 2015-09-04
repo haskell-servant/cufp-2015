@@ -11,7 +11,7 @@ import           Chat.Api
 import           MarkdownCT
 
 chatApp :: Server ChatApi
-chatApp = apiDocs :<|> postMessage :<|> getMessages
+chatApp = error "not yet implemented"
 
 apiDocs :: EitherT ServantErr IO Markdown
 apiDocs = error "not yet implemented"
