@@ -13,15 +13,6 @@ import           MarkdownCT
 chatApp :: Server ChatApi
 chatApp = error "not yet implemented"
 
-apiDocs :: EitherT ServantErr IO Markdown
-apiDocs = error "not yet implemented"
-
-postMessage :: Person -> Message -> EitherT ServantErr IO ()
-postMessage = error "not yet implemented"
-
-getMessages :: Maybe Int -> EitherT ServantErr IO ([(Person, Message)], Int)
-getMessages = error "not yet implemented"
-
 main :: IO ()
 main = do
   let port = 8087
