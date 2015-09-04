@@ -26,7 +26,7 @@ newtype Message = Message { unMessage :: String }
 type ChatApi =
        "docs" :> Get '[Markdown] Markdown
   :<|> "message" :> Capture "person" Person :> ReqBody '[JSON] Message :> Post '[JSON] ()
-  :<|> "massages" :> QueryParam "offset" Int :> Get '[JSON] ([(Person, Message)], Int)
+  :<|> "messages" :> QueryParam "offset" Int :> Get '[JSON] ([(Person, Message)], Int)
 
 chatApi :: Proxy ChatApi
 chatApi = Proxy
