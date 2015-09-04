@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fno-warn-unused-imports #-}
 module Lambda.Server where
 
 import           Network.Wai.Handler.Warp
