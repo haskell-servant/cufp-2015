@@ -1,8 +1,10 @@
 -- The untyped lambda calculus. This will form the core business logic for our
 -- application.
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE LambdaCase #-}
 module Lambda.Logic where
 
+import           Control.Applicative
 import           Data.Aeson
 import           GHC.Generics
 
@@ -22,4 +24,27 @@ pretty (App x t) = "(" ++ pretty x ++ ") " ++ pretty t
 
 -- [TASK] Implement eval for our lambda calculus
 evaluate :: Term -> Term
-evaluate = error "not yet implemented"
+evaluate t = case step t of
+  Nothing -> t
+  (Just t') -> evaluate t'
+
+step :: Term -> Maybe Term
+step = \ case
+  Var _ -> Nothing
+  Lambda param body ->
+    Lambda param <$> step body
+  App (Lambda param body) x ->
+    Just $ replace param body x
+  App f x ->
+    (App <$> step f <*> pure x) <|>
+    (App f <$> step x)
+
+replace :: String -> Term -> Term -> Term
+replace var body x = case body of
+  Var v
+    | v == var -> x
+    | otherwise -> Var v
+  Lambda p b
+    | p == var -> Lambda p b
+    | otherwise -> Lambda p (replace var b x)
+  App f a -> App (replace var f x) (replace var a x)
