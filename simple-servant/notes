@@ -1,0 +1,11 @@
+# Implementing (a simplified version of) servant-client
+
+data GET
+
+data WithPath path api
+
+data a :> b
+
+data GET a
+
+data QueryParam a
